@@ -246,3 +246,8 @@ Deze versie forceert de hero opnieuw te renderen nadat de app-data is geladen.
 Als `state.locations` leeg blijft, doet de hero zelf nog een fallback-query op Supabase naar de tabel `locations`.
 
 Daardoor blijft hij niet meer eindeloos hangen op “Locaties ophalen...”.
+
+
+## Config hersteld
+
+`config.js` is hersteld naar de werkende Supabase Project URL en anon public key.
