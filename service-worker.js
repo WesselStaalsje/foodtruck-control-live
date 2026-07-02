@@ -1,5 +1,3 @@
-const CACHE_NAME = "vishandel-de-beer-no-cache-loadfix-v1";
-
 self.addEventListener("install", () => self.skipWaiting());
 
 self.addEventListener("activate", (event) => {
@@ -10,6 +8,4 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-self.addEventListener("fetch", () => {
-  // Bewust geen fetch-handler: browser/Vercel gebruikt verse bestanden.
-});
+// Geen fetch-cache tijdens ontwikkeling.

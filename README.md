@@ -248,6 +248,20 @@ Als `state.locations` leeg blijft, doet de hero zelf nog een fallback-query op S
 Daardoor blijft hij niet meer eindeloos hangen op “Locaties ophalen...”.
 
 
-## Config hersteld
+## Config exact hersteld
 
-`config.js` is hersteld naar de werkende Supabase Project URL en anon public key.
+`config.js` is opnieuw gezet met exact de Supabase Project URL en anon public key zoals opgegeven.
+
+
+## Schone hero-locatieversie
+
+`app.js` is opnieuw schoon opgebouwd. De hero gebruikt nu direct `state.locations` uit `store.loadState()`.
+
+Gedrag:
+- alle actieve locaties van vandaag worden bovenin getoond;
+- tijden staan erbij;
+- meerdere locaties tegelijk worden getoond;
+- verborgen locaties worden genegeerd;
+- locaties van andere dagen worden genegeerd;
+- elk kaartje opent Google Maps;
+- geen fallback/duplicate hero-code meer.
