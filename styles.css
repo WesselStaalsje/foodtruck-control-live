@@ -1296,3 +1296,24 @@ textarea { resize: vertical; }
 .metric-card strong {
   color: var(--brand-blue-dark) !important;
 }
+
+
+/* safe-demo-filled-v1 */
+.brand img,
+.login-logo {
+  object-fit: contain;
+  padding: 6px;
+}
+
+.hero-copy::after {
+  content: "GEVULDE DEMO";
+  display: inline-flex;
+  margin-top: 18px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.12);
+  color: rgba(255,255,255,.86);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .08em;
+}

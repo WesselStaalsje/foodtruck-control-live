@@ -1,40 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-  <title id="title">Vishandel De Beer logo</title>
-  <desc id="desc">Blauw app-icoon met wit beer- en visbeeldmerk.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">MarktMenu Live demo logo</title>
   <defs>
-    <linearGradient id="blue" x1="72" y1="32" x2="448" y2="480" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#2F6BFF"/>
-      <stop offset="1" stop-color="#2457E8"/>
+    <linearGradient id="g" x1="80" y1="40" x2="440" y2="470" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#4D7CFF"/>
+      <stop offset="1" stop-color="#123BBD"/>
     </linearGradient>
-    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#05224A" flood-opacity=".18"/>
-    </filter>
   </defs>
-
-  <rect width="512" height="512" rx="74" fill="url(#blue)"/>
-
-  <g fill="#fff" filter="url(#softShadow)">
-    <!-- beer lichaam / ijsschots -->
-    <path d="M83 173c0-19 15-34 34-34h67c7 0 13-4 16-10l19-40c5-11 21-11 26 0l18 39c3 7 10 11 17 11h67c18 0 31 17 28 35-8 49-54 86-109 86h-55c-17 0-31 14-31 31v33H83V173Z"/>
-
-    <!-- snuit -->
-    <path d="M334 169c28 0 51 22 51 50 0 25-20 45-45 45h-80c-18 0-32-14-32-32v-63h106Z"/>
-
-    <!-- neus -->
-    <path d="M371 205c7 0 13 6 13 13s-6 13-13 13h-17c-7 0-13-6-13-13s6-13 13-13h17Z"/>
-
-    <!-- oor -->
-    <path d="M211 104c0-16 13-29 29-29s29 13 29 29v38h-58v-38Z"/>
-
-    <!-- oog -->
-    <circle cx="259" cy="151" r="9" fill="#2F6BFF"/>
-
-    <!-- vis rechts -->
-    <path d="M395 278c31 0 56 38 56 85s-25 85-56 85-56-38-56-85 25-85 56-85Z"/>
-    <path d="M435 336l33-30c7-6 18-1 18 8v98c0 9-11 14-18 8l-33-30v-54Z"/>
-    <circle cx="401" cy="331" r="7" fill="#2F6BFF"/>
-
-    <!-- golf onderzijde -->
-    <path d="M83 328h39c14 0 20 15 32 15s18-15 32-15 20 15 32 15 18-15 32-15 20 15 32 15 18-15 32-15 20 15 32 15 18-15 32-15 20 15 32 15 18-15 32-15h26v80H83v-80Z"/>
-  </g>
+  <rect width="512" height="512" rx="112" fill="url(#g)"/>
+  <path d="M145 217h222l-18 162c-4 35-25 55-61 55h-64c-36 0-57-20-61-55l-18-162z" fill="#fff"/>
+  <path d="M151 217c12-73 49-110 105-110s93 37 105 110" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round"/>
+  <rect x="183" y="247" width="146" height="25" rx="12.5" fill="#123BBD" opacity=".16"/>
+  <rect x="183" y="292" width="104" height="25" rx="12.5" fill="#123BBD" opacity=".16"/>
+  <circle cx="356" cy="126" r="44" fill="#EAF0FF" opacity=".45"/>
 </svg>

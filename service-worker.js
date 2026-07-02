@@ -8,4 +8,4 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-// Geen fetch-cache tijdens ontwikkeling/pitchfase.
+// Geen fetch-cache tijdens demo/pitchfase.

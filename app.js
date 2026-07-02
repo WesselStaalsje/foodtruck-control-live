@@ -1,227 +1,364 @@
-<!doctype html>
-<html lang="nl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#062033" />
-  <meta name="robots" content="noindex,nofollow" />
-  <title>Beheer | MarktMenu Live</title>
-  <link rel="manifest" href="/manifest.webmanifest" />
-  <link rel="apple-touch-icon" href="/assets/icon-180.png" />
-  <link rel="icon" href="/assets/favicon.png" type="image/png" />
-  <link rel="shortcut icon" href="/assets/favicon.ico" />
-  <link rel="stylesheet" href="/styles.css" />
-</head>
-<body class="admin-app">
-  <div id="login-view" class="login-screen">
-    <section class="login-card">
-      <img src="/assets/logo.png" alt="" class="login-logo" />
-      <p class="eyebrow">Beheeromgeving</p>
-      <h1>MarktMenu Live</h1>
-      <p>Pas menu, prijzen, standplaatsen en aanvragen aan zonder code of GitHub.</p>
-      <form id="login-form" class="login-form">
-        <label id="email-label" class="hidden">
-          <span>E-mail</span>
-          <input name="email" type="email" autocomplete="username" />
-        </label>
-        <label id="password-label" class="hidden">
-          <span>Wachtwoord</span>
-          <input name="password" type="password" autocomplete="current-password" />
-        </label>
-        <label id="pin-label">
-          <span>Demo pincode</span>
-          <input name="pin" inputmode="numeric" autocomplete="off" placeholder="2468" />
-        </label>
-        <button class="button primary full" type="submit">Inloggen</button>
-      </form>
-      <p id="login-feedback" class="feedback"></p>
-      <small class="muted">Deze veilige demo gebruikt geen klantdata. Log in met pincode 2468.</small>
-    </section>
-  </div>
+/* safe-demo-filled-v1 */
+(async function () {
+  const store = window.FISH_APP;
 
-  <div id="admin-view" class="admin-shell hidden">
-    <aside class="admin-sidebar">
-      <a class="brand admin-brand" href="/" target="_blank">
-        <img src="/assets/logo.png" alt="" />
-        <span>MarktMenu Control</span>
+  const els = {
+    name: document.getElementById("business-name"),
+    desc: document.getElementById("business-description"),
+    status: document.getElementById("current-status"),
+    statusNote: document.getElementById("current-location"),
+    call: document.getElementById("call-link"),
+    whatsapp: document.getElementById("whatsapp-link"),
+    footerName: document.getElementById("footer-name"),
+    footerContact: document.getElementById("footer-contact"),
+    footerWhatsapp: document.getElementById("footer-whatsapp"),
+    tabs: document.getElementById("category-tabs"),
+    list: document.getElementById("menu-list"),
+    locations: document.getElementById("locations-list"),
+    todayMapList: document.getElementById("today-map-list"),
+    search: document.getElementById("menu-search"),
+    requestForm: document.getElementById("request-form"),
+    requestFeedback: document.getElementById("request-feedback"),
+    whatsappRequest: document.getElementById("send-whatsapp")
+  };
+
+  let state = null;
+  let activeCategory = "all";
+
+  function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>'"]/g, char => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      "'": "&#039;",
+      '"': "&quot;"
+    }[char]));
+  }
+
+
+  function itemIsSoldOut(item) {
+    const value = item?.available;
+    return value === false || value === 0 || value === "false" || value === "0";
+  }
+
+  function sortMenuItemsForCustomer(a, b) {
+    const aSoldOut = itemIsSoldOut(a) ? 1 : 0;
+    const bSoldOut = itemIsSoldOut(b) ? 1 : 0;
+
+    return (
+      aSoldOut - bSoldOut ||
+      (a.display_order || 0) - (b.display_order || 0) ||
+      String(a.name || "").localeCompare(String(b.name || ""), "nl-NL")
+    );
+  }
+
+
+  function normalizeDayName(value) {
+    return String(value || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+  }
+
+  function getActiveDayName() {
+    const params = new URLSearchParams(window.location.search);
+    const override = params.get("dag") || params.get("day");
+
+    if (override) {
+      return normalizeDayName(override);
+    }
+
+    return normalizeDayName(
+      new Intl.DateTimeFormat("nl-NL", {
+        weekday: "long",
+        timeZone: "Europe/Amsterdam"
+      }).format(new Date())
+    );
+  }
+
+  function getDayIndex(dayLabel) {
+    const day = normalizeDayName(dayLabel);
+    const days = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
+    return days.findIndex(name => day.includes(name));
+  }
+
+
+  function currentAmsterdamDayIndex() {
+    const dayName = normalizeDayName(
+      new Intl.DateTimeFormat("nl-NL", {
+        weekday: "long",
+        timeZone: "Europe/Amsterdam"
+      }).format(new Date())
+    );
+
+    const days = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
+    return Math.max(0, days.findIndex(day => day === dayName));
+  }
+
+  function daysAheadFromToday(dayLabel) {
+    const dayIndex = getDayIndex(dayLabel);
+    if (dayIndex < 0) return 99;
+
+    const todayIndex = currentAmsterdamDayIndex();
+    return (dayIndex - todayIndex + 7) % 7;
+  }
+
+
+  function isActive(value) {
+    return value === true || value === 1 || value === "true" || value === "1";
+  }
+
+  function locationIsActive(location) {
+    return isActive(location?.active);
+  }
+
+  function parseStartMinutes(timeLabel) {
+    const text = String(timeLabel || "");
+    const match = text.match(/\d{1,2}[:.]\d{2}|\d{1,2}/);
+    if (!match) return 9999;
+
+    const [hoursRaw, minutesRaw = "0"] = match[0].replace(".", ":").split(":");
+    const hours = Number(hoursRaw);
+    const minutes = Number(minutesRaw);
+
+    if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return 9999;
+    return hours * 60 + minutes;
+  }
+
+  function mapsUrl(location) {
+    if (location?.map_url) return location.map_url;
+    const query = [location?.place, location?.address].filter(Boolean).join(" ");
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+  }
+
+  function todayLocations() {
+    const activeDayName = getActiveDayName();
+
+    return [...(state.locations || [])]
+      .filter(locationIsActive)
+      .map((location, index) => ({
+        ...location,
+        _index: index,
+        _dayName: normalizeDayName(location.day_label),
+        _startMinutes: parseStartMinutes(location.time_label)
+      }))
+      .filter(location => location._dayName.includes(activeDayName))
+      .sort((a, b) => a._startMinutes - b._startMinutes || (a.display_order || 0) - (b.display_order || 0) || a._index - b._index);
+  }
+
+  function renderHeroLocations() {
+    if (!els.todayMapList) return;
+
+    const locations = todayLocations();
+    els.todayMapList.innerHTML = "";
+
+    if (!locations.length) {
+      els.status.textContent = "Vandaag geen actieve standplaats";
+      els.statusNote.textContent = "Voor vandaag is er geen standplaats bekend.";
+      els.todayMapList.innerHTML = `
+        <a class="today-map-card inactive" href="#locaties">
+          <div class="map-preview muted-map" aria-hidden="true">
+            <span class="map-road road-a"></span>
+            <span class="map-road road-b"></span>
+            <span class="map-pin">×</span>
+          </div>
+          <div class="map-copy">
+            <strong>Vandaag geen standplaats bekend</strong>
+            <span>Bekijk de weekplanning hieronder of neem contact op.</span>
+            <small>Geen locatie voor vandaag</small>
+          </div>
+        </a>
+      `;
+      return;
+    }
+
+    els.status.textContent = locations.length === 1
+      ? "Vandaag op locatie"
+      : `Vandaag op ${locations.length} locaties`;
+
+    els.statusNote.textContent = locations.length === 1
+      ? "Tik op het kaartje om direct de route te openen."
+      : "Tik op een locatie om direct de route te openen.";
+
+    els.todayMapList.innerHTML = locations.map(location => `
+      <a class="today-map-card" href="${escapeHtml(mapsUrl(location))}" target="_blank" rel="noreferrer">
+        <div class="map-preview" aria-hidden="true">
+          <span class="map-road road-a"></span>
+          <span class="map-road road-b"></span>
+          <span class="map-pin">⌖</span>
+        </div>
+        <div class="map-copy">
+          <strong>${escapeHtml(location.place || "Standplaats")}</strong>
+          <span>${escapeHtml(location.address || "Adres volgt")}</span>
+          <small>${escapeHtml(location.day_label || "Vandaag")} · ${escapeHtml(location.time_label || "Tijden volgen")}</small>
+        </div>
       </a>
-      <nav class="admin-nav" aria-label="Beheer menu">
-        <button class="nav-item active" data-panel="overview">Overzicht</button>
-        <button class="nav-item" data-panel="menu">Menu</button>
-        <button class="nav-item" data-panel="locations">Standplaatsen</button>
-        <button class="nav-item" data-panel="requests">Aanvragen</button>
-        <button class="nav-item" data-panel="settings">Instellingen</button>
-      </nav>
-      <button id="logout" class="button secondary full">Uitloggen</button>
-    </aside>
+    `).join("");
+  }
 
-    <main class="admin-main">
-      <header class="admin-header">
+  function renderBusiness() {
+    const b = state.business;
+    document.title = `${b.name} | Live menu`;
+
+    els.name.textContent = b.name;
+    els.desc.textContent = b.description;
+
+    els.call.href = `tel:${b.phone}`;
+    const baseMessage = `Hallo ${b.name}, ik heb een vraag over het actuele assortiment.`;
+    const whatsappUrl = store.waUrl(b.whatsapp || b.phone, baseMessage);
+    els.whatsapp.href = whatsappUrl;
+    els.footerWhatsapp.href = whatsappUrl;
+
+    els.footerName.textContent = b.name;
+    els.footerContact.textContent = `${b.address || ""} · ${b.phone || ""} · ${b.email || ""}`;
+  }
+
+  function categoryName(id) {
+    return state.categories.find(c => c.id === id)?.name || "Overig";
+  }
+
+  function renderTabs() {
+    const categories = [...state.categories].sort(sortMenuItemsForCustomer);
+    const buttons = [{ id: "all", name: "Alles" }, ...categories];
+
+    els.tabs.innerHTML = buttons.map(cat => `
+      <button class="pill ${activeCategory === cat.id ? "active" : ""}" type="button" data-category="${escapeHtml(cat.id)}">
+        ${escapeHtml(cat.name)}
+      </button>
+    `).join("");
+
+    els.tabs.querySelectorAll("button").forEach(button => button.addEventListener("click", () => {
+      activeCategory = button.dataset.category;
+      renderTabs();
+      renderMenu();
+    }));
+  }
+
+  function renderMenu() {
+    const query = els.search.value.trim().toLowerCase();
+
+    const items = [...state.menuItems]
+      .filter(item => item.active !== false)
+      .filter(item => activeCategory === "all" || item.category_id === activeCategory)
+      .filter(item => !query || [item.name, item.description, categoryName(item.category_id), (item.tags || []).join(" ")]
+        .join(" ")
+        .toLowerCase()
+        .includes(query))
+      .sort(sortMenuItemsForCustomer);
+
+    if (!items.length) {
+      els.list.innerHTML = `<div class="empty-state">Geen producten gevonden. Probeer een andere zoekterm of kies een andere categorie.</div>`;
+      return;
+    }
+
+    els.list.innerHTML = items.map(item => {
+      const tags = Array.isArray(item.tags)
+        ? item.tags
+        : String(item.tags || "").split(",").map(tag => tag.trim()).filter(Boolean);
+
+      return `
+        <article class="menu-item ${item.highlighted ? "featured" : ""} ${itemIsSoldOut(item) ? "soldout" : ""}">
+          <div class="menu-head">
+            <div>
+              <h3>${escapeHtml(item.name)}</h3>
+              <small class="muted">${escapeHtml(categoryName(item.category_id))}</small>
+            </div>
+            <strong class="price">${escapeHtml(itemIsSoldOut(item) ? "Uitverkocht" : item.price_label || "Dagprijs")}</strong>
+          </div>
+          <p>${escapeHtml(item.description || "")}</p>
+          <div class="tag-row">
+            ${item.highlighted ? `<span class="tag orange">aanrader</span>` : ""}
+            ${tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("")}
+          </div>
+        </article>
+      `;
+    }).join("");
+  }
+
+  function renderLocations() {
+    const locations = [...state.locations]
+      .filter(locationIsActive)
+      .sort((a, b) =>
+        daysAheadFromToday(a.day_label) - daysAheadFromToday(b.day_label) ||
+        parseStartMinutes(a.time_label) - parseStartMinutes(b.time_label) ||
+        (a.display_order || 0) - (b.display_order || 0)
+      );
+
+    if (!locations.length) {
+      els.locations.innerHTML = `<div class="empty-state">Er zijn nog geen standplaatsen ingevuld.</div>`;
+      return;
+    }
+
+    els.locations.innerHTML = locations.map(loc => `
+      <article class="location-card">
+        <div class="location-day">${escapeHtml(loc.day_label)}</div>
         <div>
-          <p class="eyebrow">Demo beheer</p>
-          <h1 id="admin-title">MarktMenu Live</h1>
+          <h3>${escapeHtml(loc.place)}</h3>
+          <p>${escapeHtml(loc.address || "")}</p>
+          <p><a href="${escapeHtml(mapsUrl(loc))}" target="_blank" rel="noreferrer">Open in Google Maps</a></p>
         </div>
-        <a class="button secondary" href="/" target="_blank">Bekijk publieke app</a>
-      </header>
+        <div class="location-time">${escapeHtml(loc.time_label || "")}</div>
+      </article>
+    `).join("");
+  }
 
-      <section id="panel-overview" class="admin-panel active">
-        <div class="admin-grid three">
-          <article class="metric-card">
-            <span>Menu-items</span>
-            <strong id="metric-items">0</strong>
-            <small>Actief en verborgen samen.</small>
-          </article>
-          <article class="metric-card">
-            <span>Uitverkocht</span>
-            <strong id="metric-soldout">0</strong>
-            <small>Vandaag niet beschikbaar.</small>
-          </article>
-          <article class="metric-card">
-            <span>Aanvragen</span>
-            <strong id="metric-requests">0</strong>
-            <small>Nog te verwerken.</small>
-          </article>
-        </div>
+  function requestPayload() {
+    const form = new FormData(els.requestForm);
+    return Object.fromEntries(form.entries());
+  }
 
-        <form id="status-form" class="admin-card compact-form">
-          <div class="card-title-row">
-            <div>
-              <p class="eyebrow">Vandaag</p>
-              <h2>Status & melding</h2>
-            </div>
-            <button class="button primary" type="submit">Opslaan</button>
-          </div>
-          <div class="form-grid">
-            <label>
-              <span>Statusregel</span>
-              <input name="status_label" placeholder="Bijv. Vandaag open" />
-            </label>
-            <label class="span-2">
-              <span>Korte melding</span>
-              <input name="status_note" placeholder="Bijv. Vandaag bij de kerk in Demo Dorp" />
-            </label>
-          </div>
-        </form>
-      </section>
+  function requestMessage(payload) {
+    return [
+      `Nieuwe aanvraag via ${state.business.name}`,
+      `Type: ${payload.request_type || "-"}`,
+      `Naam: ${payload.name || "-"}`,
+      `Telefoon: ${payload.phone || "-"}`,
+      `E-mail: ${payload.email || "-"}`,
+      `Datum: ${payload.event_date || "-"}`,
+      `Aantal personen: ${payload.people || "-"}`,
+      `Bericht: ${payload.notes || "-"}`
+    ].join("\\n");
+  }
 
-      <section id="panel-menu" class="admin-panel">
-        <div class="admin-toolbar">
-          <div>
-            <p class="eyebrow">Assortiment</p>
-            <h2>Menu beheren</h2>
-          </div>
-          <button id="new-item" class="button primary">+ Product toevoegen</button>
-        </div>
+  async function submitRequest(event) {
+    event.preventDefault();
+    const payload = requestPayload();
 
-        <form id="item-form" class="admin-card item-editor hidden">
-          <input type="hidden" name="id" />
-          <div class="form-grid">
-            <label>
-              <span>Naam</span>
-              <input name="name" required placeholder="Kibbeling" />
-            </label>
-            <label>
-              <span>Prijs / tekst</span>
-              <input name="price_label" placeholder="€ 6,50 / dagprijs" />
-            </label>
-            <label>
-              <span>Categorie</span>
-              <select name="category_id" required></select>
-            </label>
-            <label>
-              <span>Labels</span>
-              <input name="tags" placeholder="warm, populair, glutenvrij" />
-            </label>
-            <label class="span-2">
-              <span>Omschrijving</span>
-              <textarea name="description" rows="3"></textarea>
-            </label>
-            <label class="checkline">
-              <input name="available" type="checkbox" checked /> Beschikbaar
-            </label>
-            <label class="checkline">
-              <input name="highlighted" type="checkbox" /> Uitgelicht
-            </label>
-            <label class="checkline">
-              <input name="active" type="checkbox" checked /> Tonen op menu
-            </label>
-          </div>
-          <div class="form-actions">
-            <button class="button primary" type="submit">Product opslaan</button>
-            <button id="cancel-item" class="button secondary" type="button">Annuleren</button>
-          </div>
-        </form>
+    try {
+      await store.submitRequest(payload);
+      els.requestFeedback.textContent = "Aanvraag ontvangen. Bedankt, we nemen contact op.";
+      els.requestForm.reset();
+    } catch (error) {
+      els.requestFeedback.textContent = `Versturen lukte niet: ${error.message}`;
+    }
+  }
 
-        <div id="admin-menu-list" class="admin-list"></div>
-      </section>
+  function openWhatsAppRequest() {
+    const payload = requestPayload();
+    window.open(store.waUrl(state.business.whatsapp || state.business.phone, requestMessage(payload)), "_blank", "noopener,noreferrer");
+  }
 
-      <section id="panel-locations" class="admin-panel">
-        <div class="admin-toolbar">
-          <div>
-            <p class="eyebrow">Kraamplanning</p>
-            <h2>Standplaatsen beheren</h2>
-          </div>
-          <button id="new-location" class="button primary">+ Standplaats toevoegen</button>
-        </div>
+  async function init() {
+    try {
+      state = await store.loadState();
+      window.__DEBEER_LAST_STATE = state;
 
-        <form id="location-form" class="admin-card item-editor hidden">
-          <input type="hidden" name="id" />
-          <div class="form-grid">
-            <label><span>Dag</span><input name="day_label" required placeholder="Vrijdag" /></label>
-            <label><span>Tijd</span><input name="time_label" placeholder="10:00 - 18:00" /></label>
-            <label><span>Plaats</span><input name="place" required placeholder="Demo locatie" /></label>
-            <label><span>Adres / plek</span><input name="address" placeholder="Demo plein" /></label>
-            <label class="span-2"><span>Google Maps link</span><input name="map_url" placeholder="https://maps.google.com/..." /></label>
-            <label class="checkline"><input name="active" type="checkbox" checked /> Tonen</label>
-          </div>
-          <div class="form-actions">
-            <button class="button primary" type="submit">Standplaats opslaan</button>
-            <button id="cancel-location" class="button secondary" type="button">Annuleren</button>
-          </div>
-        </form>
+      renderBusiness();
+      renderHeroLocations();
+      renderTabs();
+      renderMenu();
+      renderLocations();
 
-        <div id="admin-locations-list" class="admin-list"></div>
-      </section>
+      els.search.addEventListener("input", renderMenu);
+      els.requestForm.addEventListener("submit", submitRequest);
+      els.whatsappRequest.addEventListener("click", openWhatsAppRequest);
+    } catch (error) {
+      document.body.innerHTML = `<main class="section" style="max-width:760px;margin:0 auto;padding:40px 18px">
+        <div class="empty-state"><strong>App kon niet laden.</strong><br>${escapeHtml(error.message)}</div>
+      </main>`;
+    }
+  }
 
-      <section id="panel-requests" class="admin-panel">
-        <div class="admin-toolbar">
-          <div>
-            <p class="eyebrow">Inbox</p>
-            <h2>Aanvragen</h2>
-          </div>
-          <button id="refresh-requests" class="button secondary">Ververs</button>
-        </div>
-        <div id="admin-requests-list" class="admin-list"></div>
-      </section>
-
-      <section id="panel-settings" class="admin-panel">
-        <form id="settings-form" class="admin-card">
-          <div class="card-title-row">
-            <div>
-              <p class="eyebrow">Publieke pagina</p>
-              <h2>Bedrijfsgegevens</h2>
-            </div>
-            <button class="button primary" type="submit">Opslaan</button>
-          </div>
-          <div class="form-grid">
-            <label><span>Bedrijfsnaam</span><input name="name" required /></label>
-            <label><span>Subtitel</span><input name="subtitle" /></label>
-            <label><span>Telefoon</span><input name="phone" /></label>
-            <label><span>WhatsApp</span><input name="whatsapp" /></label>
-            <label><span>E-mail</span><input name="email" /></label>
-            <label><span>Adres</span><input name="address" /></label>
-            <label class="span-2"><span>Intro tekst</span><textarea name="description" rows="4"></textarea></label>
-          </div>
-        </form>
-      </section>
-
-      <p id="admin-feedback" class="feedback floating-feedback" role="status"></p>
-    </main>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/config.js"></script>
-  <script src="/data.js"></script>
-  <script src="/admin.js"></script>
-</body>
-</html>
+  init();
+})();

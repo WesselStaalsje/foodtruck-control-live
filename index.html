@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#062033" />
-  <meta name="description" content="Live mobiele menukaart en standplaatsenpagina voor marktkramen, foodtrucks en cateraars." />
-  <title>MarktMenu Live | Demo</title>
+  <meta name="description" content="Demo van een live mobiele menukaart, standplaatsenpagina en bestelpagina voor foodtrucks, marktkramen en cateraars." />
+  <title>MarktMenu Live | Gevulde demo</title>
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="/assets/icon-180.png" />
   <link rel="icon" href="/assets/favicon.png" type="image/png" />
@@ -28,7 +28,7 @@
         <div class="hero-copy">
           <p class="eyebrow" id="status-eyebrow">Live dagmenu</p>
           <h1 id="business-name">MarktMenu Live</h1>
-          <p class="hero-text" id="business-description">Bekijk het actuele aanbod, de standplaatsen van vandaag en vraag eenvoudig een bestelling of reservering aan.</p>
+          <p class="hero-text" id="business-description">Bekijk demo-producten, fictieve standplaatsen en probeer de aanvraagfunctie uit.</p>
           <div class="hero-actions">
             <a class="button primary" href="#menu">Bekijk aanbod</a>
             <a class="button secondary" href="#aanvragen">Bestellen / reserveren</a>
@@ -83,7 +83,7 @@
         <a href="#aanvragen" class="quick-card">
           <span>03</span>
           <strong>Reserveren</strong>
-          <small>Vraag snel een schotel, bestelling of informatie aan.</small>
+          <small>Vraag snel een bestelling, cateringpakket of offerte aan.</small>
         </a>
       </section>
 
@@ -91,13 +91,13 @@
         <div class="section-heading">
           <p class="eyebrow">Vers van de kraam</p>
           <h2>Actueel aanbod</h2>
-          <p>Bekijk het actuele assortiment van de kraam. Prijzen en beschikbaarheid kunnen per dag verschillen.</p>
+          <p>Bekijk hoe producten, prijzen, tags en uitverkocht-status live getoond worden.</p>
         </div>
 
         <div class="menu-tools">
           <label class="search-box">
             <span>Zoeken</span>
-            <input id="menu-search" type="search" placeholder="Zoek op kibbeling, zalm, mosselen..." autocomplete="off" />
+            <input id="menu-search" type="search" placeholder="Zoek op burger, friet, wrap, koffie..." autocomplete="off" />
           </label>
           <div id="category-tabs" class="pill-row" role="tablist" aria-label="Categorieën"></div>
         </div>
@@ -109,7 +109,7 @@
         <div class="section-heading sticky-heading">
           <p class="eyebrow">Standplaatsen</p>
           <h2>Waar staan we?</h2>
-          <p>Bekijk waar de kraam vandaag en deze week te vinden is.</p>
+          <p>Bekijk fictieve standplaatsen. Elke locatie kan direct naar Google Maps linken.</p>
         </div>
         <div id="locations-list" class="location-list"></div>
       </section>
@@ -118,7 +118,7 @@
         <div class="section-heading">
           <p class="eyebrow">Bestellen of reserveren</p>
           <h2>Vraag direct aan</h2>
-          <p>Vraag eenvoudig een schotel, bestelling of reservering aan. Wij nemen daarna contact op.</p>
+          <p>Probeer de aanvraagfunctie uit. In demo-modus wordt dit lokaal opgeslagen.</p>
         </div>
 
         <form id="request-form" class="request-card">
@@ -154,7 +154,7 @@
             </label>
             <label class="span-2">
               <span>Bericht</span>
-              <textarea name="notes" rows="5" placeholder="Bijvoorbeeld: borrelschotel voor 8 personen, ophalen zaterdagmiddag."></textarea>
+              <textarea name="notes" rows="5" placeholder="Bijvoorbeeld: lunchpakket voor 12 personen, ophalen vrijdagmiddag."></textarea>
             </label>
           </div>
           <div class="form-actions">
