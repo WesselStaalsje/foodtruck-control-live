@@ -1,7 +1,7 @@
 {
   "name": "Vishandel De Beer Live Menu",
   "short_name": "De Beer",
-  "description": "Live QR-menu, locaties en schotelaanvragen voor Vishandel De Beer.",
+  "description": "Actueel aanbod, standplaatsen en reserveringen van Vishandel De Beer.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#062033",

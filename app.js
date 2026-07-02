@@ -1,3 +1,4 @@
+/* polished-final-v1 */
 /* day-override-final-v1 */
 (async function () {
   const store = window.FISH_APP;
@@ -115,7 +116,7 @@
 
     if (!locations.length) {
       els.status.textContent = "Vandaag geen actieve standplaats";
-      els.statusNote.textContent = "Er zijn vandaag geen actieve locaties zichtbaar gezet.";
+      els.statusNote.textContent = "Er zijn voor vandaag geen standplaatsen ingevuld.";
       els.todayMapList.innerHTML = `
         <a class="today-map-card inactive" href="#locaties">
           <div class="map-preview muted-map" aria-hidden="true">
@@ -124,9 +125,9 @@
             <span class="map-pin">×</span>
           </div>
           <div class="map-copy">
-            <strong>Geen kraamlocatie vandaag</strong>
+            <strong>Vandaag geen standplaats bekend</strong>
             <span>Bekijk de weekplanning hieronder of neem contact op.</span>
-            <small>Geen actieve locatie voor vandaag</small>
+            <small>Geen locatie voor vandaag</small>
           </div>
         </a>
       `;
@@ -138,8 +139,8 @@
       : `Vandaag op ${locations.length} locaties`;
 
     els.statusNote.textContent = locations.length === 1
-      ? "Tik op het kaartje om direct Google Maps te openen."
-      : "Tik op een locatie om direct Google Maps te openen.";
+      ? "Tik op het kaartje om direct de route te openen."
+      : "Tik op een locatie om direct de route te openen.";
 
     els.todayMapList.innerHTML = locations.map(location => `
       <a class="today-map-card" href="${escapeHtml(mapsUrl(location))}" target="_blank" rel="noreferrer">
@@ -165,7 +166,7 @@
     els.desc.textContent = b.description;
 
     els.call.href = `tel:${b.phone}`;
-    const baseMessage = `Hallo ${b.name}, ik heb een vraag over het assortiment.`;
+    const baseMessage = `Hallo ${b.name}, ik heb een vraag over het actuele assortiment.`;
     const whatsappUrl = store.waUrl(b.whatsapp || b.phone, baseMessage);
     els.whatsapp.href = whatsappUrl;
     els.footerWhatsapp.href = whatsappUrl;
@@ -208,7 +209,7 @@
       .sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
 
     if (!items.length) {
-      els.list.innerHTML = `<div class="empty-state">Geen producten gevonden. Probeer een andere zoekterm of categorie.</div>`;
+      els.list.innerHTML = `<div class="empty-state">Geen producten gevonden. Probeer een andere zoekterm of kies een andere categorie.</div>`;
       return;
     }
 
@@ -283,10 +284,10 @@
 
     try {
       await store.submitRequest(payload);
-      els.requestFeedback.textContent = "Aanvraag opgeslagen. Bedankt, we nemen contact op.";
+      els.requestFeedback.textContent = "Aanvraag ontvangen. Bedankt, we nemen contact op.";
       els.requestForm.reset();
     } catch (error) {
-      els.requestFeedback.textContent = `Opslaan lukte niet: ${error.message}`;
+      els.requestFeedback.textContent = `Versturen lukte niet: ${error.message}`;
     }
   }
 

@@ -811,3 +811,117 @@ textarea { resize: vertical; }
     border-radius: 15px;
   }
 }
+
+
+/* Polished klantzijde */
+.trust-strip {
+  max-width: 1120px;
+  margin: -28px auto 22px;
+  padding: 0 18px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  position: relative;
+  z-index: 4;
+}
+
+.trust-strip div {
+  min-height: 92px;
+  padding: 18px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .94);
+  border: 1px solid rgba(6, 32, 51, .08);
+  box-shadow: 0 16px 42px rgba(6, 32, 51, .10);
+  display: grid;
+  gap: 6px;
+}
+
+.trust-strip strong {
+  color: #062033;
+  font-size: .98rem;
+}
+
+.trust-strip span {
+  color: rgba(6, 32, 51, .68);
+  font-size: .9rem;
+  line-height: 1.35;
+}
+
+.hero-copy h1 {
+  letter-spacing: -0.045em;
+}
+
+.hero-text {
+  max-width: 640px;
+}
+
+.section-heading p {
+  max-width: 680px;
+}
+
+.menu-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-item.featured::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5px;
+  background: linear-gradient(180deg, #ff7a3d, #ffbd6b);
+  border-radius: 999px;
+}
+
+.price {
+  white-space: nowrap;
+}
+
+.request-card {
+  box-shadow: 0 26px 90px rgba(6, 32, 51, .14);
+}
+
+.footer {
+  align-items: center;
+}
+
+.footer-note {
+  color: rgba(255,255,255,.66);
+  font-size: .86rem;
+  line-height: 1.35;
+}
+
+.empty-state strong {
+  color: inherit;
+}
+
+@media (max-width: 840px) {
+  .trust-strip {
+    grid-template-columns: 1fr;
+    margin-top: -18px;
+  }
+
+  .trust-strip div {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .footer {
+    gap: 14px;
+  }
+
+  .footer-note {
+    order: 3;
+    width: 100%;
+  }
+}

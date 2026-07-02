@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#062033" />
   <meta name="description" content="Live QR-menu en schotelaanvragen voor Vishandel De Beer." />
-  <title>Vishandel De Beer | Live menu</title>
+  <title>Vishandel De Beer | Actueel aanbod</title>
   <link rel="manifest" href="/manifest.webmanifest" />
   <link rel="apple-touch-icon" href="/assets/icon-180.png" />
   <link rel="icon" href="/assets/favicon.png" type="image/png" />
@@ -27,11 +27,11 @@
       <section id="top" class="hero-grid">
         <div class="hero-copy">
           <p class="eyebrow" id="status-eyebrow">Live dagmenu</p>
-          <h1 id="business-name">Dagverse vis, schotels en lekkers van de kraam.</h1>
-          <p class="hero-text" id="business-description">Bekijk het actuele assortiment, check waar de kraam staat en vraag eenvoudig een schotel of bestelling aan.</p>
+          <h1 id="business-name">Dagverse vis, huisgemaakte schotels en warme lekkernijen van de kraam.</h1>
+          <p class="hero-text" id="business-description">Bekijk het actuele aanbod, check waar de kraam vandaag staat en vraag eenvoudig een visschotel of bestelling aan.</p>
           <div class="hero-actions">
-            <a class="button primary" href="#menu">Bekijk menu</a>
-            <a class="button secondary" href="#aanvragen">Schotel aanvragen</a>
+            <a class="button primary" href="#menu">Bekijk aanbod</a>
+            <a class="button secondary" href="#aanvragen">Bestellen / reserveren</a>
           </div>
         </div>
         <aside class="status-card today-card" aria-live="polite">
@@ -73,25 +73,41 @@
         <a href="#menu" class="quick-card">
           <span>01</span>
           <strong>Menu</strong>
-          <small>Prijzen, dagproducten en uitverkocht-status.</small>
+          <small>Bekijk wat er vandaag beschikbaar is.</small>
         </a>
         <a href="#locaties" class="quick-card">
           <span>02</span>
           <strong>Standplaatsen</strong>
-          <small>Waar staat de kraam vandaag of deze week?</small>
+          <small>Bekijk de actuele standplaatsen.</small>
         </a>
         <a href="#aanvragen" class="quick-card">
           <span>03</span>
           <strong>Aanvragen</strong>
-          <small>Schotel, bestelling of vraag direct doorsturen.</small>
+          <small>Bestel of reserveer eenvoudig vooraf.</small>
         </a>
+      </section>
+
+
+      <section class="trust-strip" aria-label="Praktische informatie">
+        <div>
+          <strong>Actueel aanbod</strong>
+          <span>Prijzen en beschikbaarheid kunnen per dag wisselen.</span>
+        </div>
+        <div>
+          <strong>Route direct openen</strong>
+          <span>Tik op een standplaats voor Google Maps.</span>
+        </div>
+        <div>
+          <strong>Snel reserveren</strong>
+          <span>Stuur eenvoudig een aanvraag of WhatsApp-bericht.</span>
+        </div>
       </section>
 
       <section id="menu" class="section">
         <div class="section-heading">
-          <p class="eyebrow">Actueel assortiment</p>
-          <h2>Live menu</h2>
-          <p>De ondernemer kan prijzen, beschikbaarheid en categorieën direct aanpassen in het beheerscherm.</p>
+          <p class="eyebrow">Vers van de kraam</p>
+          <h2>Actueel aanbod</h2>
+          <p>Bekijk het actuele assortiment van de kraam. Prijzen en beschikbaarheid kunnen per dag verschillen.</p>
         </div>
 
         <div class="menu-tools">
@@ -107,25 +123,25 @@
 
       <section id="locaties" class="section split-section">
         <div class="section-heading sticky-heading">
-          <p class="eyebrow">Weekplanning</p>
+          <p class="eyebrow">Standplaatsen</p>
           <h2>Waar staan we?</h2>
-          <p>De standplaatsen zijn apart beheerbaar, zodat de QR-pagina altijd klopt.</p>
+          <p>Bekijk waar de kraam vandaag en deze week te vinden is.</p>
         </div>
         <div id="locations-list" class="location-list"></div>
       </section>
 
       <section id="aanvragen" class="section request-section">
         <div class="section-heading">
-          <p class="eyebrow">Schotel of bestelling</p>
+          <p class="eyebrow">Bestellen of reserveren</p>
           <h2>Vraag direct aan</h2>
-          <p>De aanvraag komt in het dashboard en kan ook via WhatsApp worden doorgestuurd.</p>
+          <p>Vraag eenvoudig een schotel, bestelling of reservering aan. Wij nemen daarna contact op.</p>
         </div>
 
         <form id="request-form" class="request-card">
           <div class="form-grid">
             <label>
               <span>Naam</span>
-              <input name="name" required placeholder="Uw naam" />
+              <input name="name" required placeholder="Naam" />
             </label>
             <label>
               <span>Telefoon</span>
@@ -142,23 +158,23 @@
             <label>
               <span>Type aanvraag</span>
               <select name="request_type">
-                <option>Schotel bestellen</option>
+                <option>Visschotel bestellen</option>
                 <option>Verse vis reserveren</option>
                 <option>Catering / feestje</option>
-                <option>Algemene vraag</option>
+                <option>Vraag over assortiment</option>
               </select>
             </label>
             <label>
               <span>Aantal personen</span>
-              <input name="people" type="number" min="1" placeholder="bijv. 10" />
+              <input name="people" type="number" min="1" placeholder="Bijv. 10" />
             </label>
             <label class="span-2">
               <span>Bericht</span>
-              <textarea name="notes" rows="5" placeholder="Wat wilt u bestellen of vragen?"></textarea>
+              <textarea name="notes" rows="5" placeholder="Bijvoorbeeld: zalmsalade voor 8 personen, ophalen zaterdagmiddag."></textarea>
             </label>
           </div>
           <div class="form-actions">
-            <button class="button primary" type="submit">Aanvraag opslaan</button>
+            <button class="button primary" type="submit">Aanvraag versturen</button>
             <button class="button secondary" type="button" id="send-whatsapp">Verstuur via WhatsApp</button>
           </div>
           <p id="request-feedback" class="feedback" role="status"></p>
@@ -171,6 +187,7 @@
         <strong id="footer-name">Vishandel De Beer</strong>
         <p id="footer-contact">Beek en Donk · 06 22479902 · vishandeldebeer@live.nl</p>
       </div>
+      <div class="footer-note">Aanbod en prijzen kunnen per dag verschillen.</div>
       <a id="footer-whatsapp" class="mini-button warm" target="_blank" rel="noreferrer">WhatsApp</a>
     </footer>
   </div>
