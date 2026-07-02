@@ -267,16 +267,15 @@ Gedrag:
 - geen fallback/duplicate hero-code meer.
 
 
-## Fix: Nederlandse dag/tijdzone
+## Final fix: dag override + Europe/Amsterdam
 
-De hero bepaalt de huidige dag nu expliciet via `Europe/Amsterdam` en vergelijkt op Nederlandse dagnaam.
+De hero gebruikt nu:
+- `?dag=zaterdag` of `?day=zaterdag` als testoverride;
+- anders de huidige dag in `Europe/Amsterdam`.
 
-Dus:
-- zaterdag toont zaterdaglocaties;
-- vrijdaglocaties verdwijnen op zaterdag;
-- verborgen locaties blijven verborgen;
-- meerdere zaterdaglocaties worden tegelijk getoond.
+Voorbeelden:
+- `/` toont de echte Nederlandse dag;
+- `/?dag=zaterdag` toont zaterdaglocaties;
+- `/?dag=vrijdag` toont vrijdaglocaties.
 
-Testen kan tijdelijk met:
-- `?dag=vrijdag`
-- `?dag=zaterdag`
+Als `?dag=zaterdag` nog vrijdag toont, staat deze ZIP niet goed op GitHub/Vercel of de browser laadt oude cache.

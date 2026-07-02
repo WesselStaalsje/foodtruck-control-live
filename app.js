@@ -1,3 +1,4 @@
+/* day-override-final-v1 */
 (async function () {
   const store = window.FISH_APP;
 
@@ -42,8 +43,20 @@
       .trim();
   }
 
-  function getTodayIndex() {
-    return new Date().getDay();
+  function getActiveDayName() {
+    const params = new URLSearchParams(window.location.search);
+    const override = params.get("dag") || params.get("day");
+
+    if (override) {
+      return normalizeDayName(override);
+    }
+
+    return normalizeDayName(
+      new Intl.DateTimeFormat("nl-NL", {
+        weekday: "long",
+        timeZone: "Europe/Amsterdam"
+      }).format(new Date())
+    );
   }
 
   function getDayIndex(dayLabel) {
@@ -80,17 +93,17 @@
   }
 
   function todayLocations() {
-    const todayIndex = getTodayIndex();
+    const activeDayName = getActiveDayName();
 
     return [...(state.locations || [])]
       .filter(locationIsActive)
       .map((location, index) => ({
         ...location,
         _index: index,
-        _dayIndex: getDayIndex(location.day_label),
+        _dayName: normalizeDayName(location.day_label),
         _startMinutes: parseStartMinutes(location.time_label)
       }))
-      .filter(location => location._dayIndex === todayIndex)
+      .filter(location => location._dayName.includes(activeDayName))
       .sort((a, b) => a._startMinutes - b._startMinutes || (a.display_order || 0) - (b.display_order || 0) || a._index - b._index);
   }
 
