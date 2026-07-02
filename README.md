@@ -347,3 +347,12 @@ De statische fallback in `index.html` is aangepast:
 - H1 toont direct `Vishandel De Beer`;
 - de lange marketingzin staat niet meer als enorme titel tijdens laden;
 - Supabase mag daarna dezelfde tekst opnieuw invullen, zonder storende flits.
+
+
+## Blue brand hardfix
+
+Deze ZIP is gebaseerd op de werkende no-flash-versie.
+Controle:
+- `/app.js` begint exact met `/* blue-brand-v1 */`
+- `styles.css` bevat `blue-brand-v1 hardfix`
+- Supabase-config is intact
