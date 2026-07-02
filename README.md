@@ -211,3 +211,15 @@ Voorbeeld:
 - Zaterdag Stiphout = niet zichtbaar op vrijdag.
 - Verborgen locaties = nooit zichtbaar.
 - Meerdere locaties met overlappend tijdvak = tegelijk zichtbaar in de hero.
+
+
+## Fix: hero toont locaties van vandaag
+
+De hero toont nu alle actieve standplaatsen van de huidige dag, inclusief tijden.
+
+Gedrag:
+- vrijdag toont alle actieve vrijdaglocaties;
+- zaterdag/Stiphout verschijnt dus niet op vrijdag;
+- verborgen locaties worden niet getoond;
+- meerdere actieve locaties op dezelfde dag verschijnen tegelijk;
+- elk locatiekaartje opent de juiste Google Maps-link.

@@ -1,4 +1,4 @@
-const CACHE_NAME = "de-beer-live-v1-v3-multi-locations";
+const CACHE_NAME = "de-beer-live-v1-v3-multi-locations-day-locations";
 const ASSETS = ["/", "/index.html", "/admin.html", "/styles.css", "/app.js", "/admin.js", "/config.js", "/assets/logo.svg", "/manifest.webmanifest"];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).catch(() => null));

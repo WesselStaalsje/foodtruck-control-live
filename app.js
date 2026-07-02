@@ -46,7 +46,6 @@ function parseTimeWindow(timeLabel) {
 
 function getTodayActiveLocations(locations = [], date = new Date()) {
   const todayIndex = date.getDay();
-  const nowMinutes = (date.getHours() * 60) + date.getMinutes();
 
   return (locations || [])
     .filter(locationIsActive)
@@ -57,11 +56,6 @@ function getTodayActiveLocations(locations = [], date = new Date()) {
       _timeWindow: parseTimeWindow(location.time_label),
     }))
     .filter((location) => location._dayIndex === todayIndex)
-    .filter((location) => {
-      // Hero = alleen standplaatsen die NU actief zijn.
-      // Dus: juiste dag + actief + huidige tijd binnen het tijdvak.
-      return nowMinutes >= location._timeWindow.start && nowMinutes <= location._timeWindow.end;
-    })
     .sort((a, b) => a._timeWindow.start - b._timeWindow.start || a._index - b._index);
 }
 
@@ -112,7 +106,7 @@ function renderTodayHeroLocation(state) {
   listEl.innerHTML = "";
 
   if (!locations.length) {
-    if (currentStatus) currentStatus.textContent = "Nu geen actieve standplaats";
+    if (currentStatus) currentStatus.textContent = "Vandaag geen actieve standplaats";
     const empty = document.createElement("a");
     empty.className = "today-map-card inactive";
     empty.href = "#locaties";
@@ -123,13 +117,13 @@ function renderTodayHeroLocation(state) {
         <span class="map-pin">×</span>
       </div>
       <div class="map-copy">
-        <strong>Nu geen actieve kraamlocatie</strong>
+        <strong>Vandaag geen kraamlocatie</strong>
         <span>Bekijk de weekplanning hieronder of neem contact op.</span>
-        <small>Buiten het huidige tijdvak</small>
+        <small>Geen actieve locatie voor vandaag</small>
       </div>
     `;
     listEl.appendChild(empty);
-    if (currentLocation) currentLocation.textContent = "De hero toont alleen locaties die nu binnen het ingestelde tijdvak vallen.";
+    if (currentLocation) currentLocation.textContent = "De hero toont alleen actieve locaties van vandaag.";
     return;
   }
 
@@ -146,7 +140,7 @@ function renderTodayHeroLocation(state) {
   if (currentLocation) {
     currentLocation.textContent = locations.length === 1
       ? "Tik op het kaartje om de route direct in Google Maps te openen."
-      : "Tik op een kaartje om die route direct in Google Maps te openen.";
+      : "Tik op een locatie om die route direct in Google Maps te openen.";
   }
 }
 
