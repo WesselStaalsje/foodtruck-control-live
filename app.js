@@ -1,3 +1,4 @@
+/* final-polish-v2 */
 /* polished-final-v1 */
 /* day-override-final-v1 */
 (async function () {
@@ -66,6 +67,28 @@
     return days.findIndex(name => day.includes(name));
   }
 
+
+  function currentAmsterdamDayIndex() {
+    const dayName = normalizeDayName(
+      new Intl.DateTimeFormat("nl-NL", {
+        weekday: "long",
+        timeZone: "Europe/Amsterdam"
+      }).format(new Date())
+    );
+
+    const days = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
+    return Math.max(0, days.findIndex(day => day === dayName));
+  }
+
+  function daysAheadFromToday(dayLabel) {
+    const dayIndex = getDayIndex(dayLabel);
+    if (dayIndex < 0) return 99;
+
+    const todayIndex = currentAmsterdamDayIndex();
+    return (dayIndex - todayIndex + 7) % 7;
+  }
+
+
   function isActive(value) {
     return value === true || value === 1 || value === "true" || value === "1";
   }
@@ -116,7 +139,7 @@
 
     if (!locations.length) {
       els.status.textContent = "Vandaag geen actieve standplaats";
-      els.statusNote.textContent = "Er zijn voor vandaag geen standplaatsen ingevuld.";
+      els.statusNote.textContent = "Voor vandaag is er geen standplaats bekend.";
       els.todayMapList.innerHTML = `
         <a class="today-map-card inactive" href="#locaties">
           <div class="map-preview muted-map" aria-hidden="true">
@@ -180,7 +203,11 @@
   }
 
   function renderTabs() {
-    const categories = [...state.categories].sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+    const categories = [...state.categories].sort((a, b) => {
+        const aSoldOut = a.available === false ? 1 : 0;
+        const bSoldOut = b.available === false ? 1 : 0;
+        return aSoldOut - bSoldOut || (a.display_order || 0) - (b.display_order || 0);
+      });
     const buttons = [{ id: "all", name: "Alles" }, ...categories];
 
     els.tabs.innerHTML = buttons.map(cat => `
@@ -240,7 +267,11 @@
   function renderLocations() {
     const locations = [...state.locations]
       .filter(locationIsActive)
-      .sort((a, b) => (getDayIndex(a.day_label) - getDayIndex(b.day_label)) || (parseStartMinutes(a.time_label) - parseStartMinutes(b.time_label)) || (a.display_order || 0) - (b.display_order || 0));
+      .sort((a, b) =>
+        daysAheadFromToday(a.day_label) - daysAheadFromToday(b.day_label) ||
+        parseStartMinutes(a.time_label) - parseStartMinutes(b.time_label) ||
+        (a.display_order || 0) - (b.display_order || 0)
+      );
 
     if (!locations.length) {
       els.locations.innerHTML = `<div class="empty-state">Er zijn nog geen standplaatsen ingevuld.</div>`;

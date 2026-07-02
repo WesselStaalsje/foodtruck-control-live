@@ -299,3 +299,16 @@ Deze versie is klantgericht opgeschoond:
 
 De extra trust-strip is verwijderd omdat die visueel over de drie navigatiekaarten heen viel.
 De drie quick-cards zijn nu rustiger, gelijkmatig uitgelijnd en bevatten zelf de nuttige informatie.
+
+
+## Final polish v2
+
+Aangepast:
+- logo ongewijzigd gelaten;
+- hero compacter gemaakt;
+- standplaatsenlijst sorteert vanaf vandaag;
+- uitverkochte producten worden onderaan gezet;
+- menu-kaarten rustiger en gelijkmatiger gemaakt;
+- footer/disclaimer beter leesbaar gemaakt;
+- aanvraagtekst menselijker gemaakt;
+- Supabase-config intact gehouden.
