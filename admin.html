@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#15100b" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Foodtruck Control | Beheer</title>
+    <link rel="icon" href="/assets/logo.svg" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/config.js"></script>
+    <script src="/admin.js" defer></script>
+  </head>
+  <body class="admin-page">
+    <div class="admin-shell">
+      <aside class="admin-sidebar">
+        <div class="admin-brand">
+          <img src="/assets/logo.svg" alt="Foodtruck Control" />
+          <div>
+            <strong>Foodtruck Control</strong>
+            <span>Live beheer</span>
+          </div>
+        </div>
+        <nav class="admin-tabs" aria-label="Beheer menu">
+          <button class="tab-button active" data-tab="overview">Overzicht</button>
+          <button class="tab-button" data-tab="menu">Menu</button>
+          <button class="tab-button" data-tab="categories">Categorieën</button>
+          <button class="tab-button" data-tab="requests">Aanvragen</button>
+          <button class="tab-button" data-tab="settings">Instellingen</button>
+        </nav>
+        <a class="preview-link" id="previewLink" href="/" target="_blank" rel="noreferrer">Publieke pagina openen</a>
+        <button class="logout-button" id="logoutButton" type="button">Uitloggen</button>
+      </aside>
+
+      <main class="admin-main">
+        <section class="login-card glass-card" id="loginCard">
+          <img src="/assets/logo.svg" alt="" />
+          <p class="eyebrow">Beveiligde beheeromgeving</p>
+          <h1>Log in om je menu live te beheren</h1>
+          <p>De klant ziet deze pagina niet. Alleen de publieke QR-menukaart is zichtbaar.</p>
+          <form id="loginForm" class="login-form">
+            <label>E-mail
+              <input type="email" name="email" autocomplete="email" placeholder="jij@foodtruck.nl" required />
+            </label>
+            <label>Wachtwoord
+              <input type="password" name="password" autocomplete="current-password" placeholder="••••••••" required />
+            </label>
+            <button class="btn primary" type="submit">Inloggen</button>
+          </form>
+          <button class="btn ghost demo-login" id="demoLoginButton" type="button">Demo-dashboard openen</button>
+          <p class="form-feedback" id="loginFeedback"></p>
+        </section>
+
+        <section class="admin-content hidden" id="adminContent">
+          <header class="admin-topbar">
+            <div>
+              <p class="eyebrow">Dashboard</p>
+              <h1 id="adminBusinessName">Foodtruck</h1>
+            </div>
+            <div class="topbar-actions">
+              <span class="live-badge">Live</span>
+              <button class="btn ghost compact" id="refreshButton" type="button">Vernieuwen</button>
+            </div>
+          </header>
+
+          <div class="admin-tab-panel active" id="tab-overview"></div>
+          <div class="admin-tab-panel" id="tab-menu"></div>
+          <div class="admin-tab-panel" id="tab-categories"></div>
+          <div class="admin-tab-panel" id="tab-requests"></div>
+          <div class="admin-tab-panel" id="tab-settings"></div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
