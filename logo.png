@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">MarktMenu Live demo logo</title>
+  <rect width="512" height="512" rx="112" fill="#3768F4"/>
+  <circle cx="384" cy="128" r="54" fill="#EAF0FF" opacity=".55"/>
+  <path d="M115 265c58-76 140-105 235-52l47-35c12-9 29 3 24 18l-21 60 21 60c5 15-12 27-24 18l-47-35c-95 53-177 24-235-52-9-12-9-29 0-42z" fill="#fff"/>
+  <circle cx="184" cy="248" r="12" fill="#1646C8"/>
+  <path d="M222 314c39 14 78 10 117-12" stroke="#1646C8" stroke-width="22" stroke-linecap="round" fill="none" opacity=".25"/>
+</svg>

@@ -1192,12 +1192,12 @@ textarea { resize: vertical; }
 }
 
 
-/* blue-brand-v1 hardfix */
+/* safe-demo-blue-v1 */
 :root {
-  --debeer-blue: #3768F4;
-  --debeer-blue-dark: #1646C8;
-  --debeer-blue-soft: #EAF0FF;
-  --debeer-navy: #071E35;
+  --brand-blue: #3768F4;
+  --brand-blue-dark: #1646C8;
+  --brand-blue-soft: #EAF0FF;
+  --brand-navy: #071E35;
 }
 
 .eyebrow,
@@ -1205,13 +1205,13 @@ textarea { resize: vertical; }
 .location-day,
 .section-heading .eyebrow,
 .small-label {
-  color: var(--debeer-blue) !important;
+  color: var(--brand-blue) !important;
 }
 
 .button.primary,
 .pill.active,
 .map-pin {
-  background: linear-gradient(135deg, var(--debeer-blue), var(--debeer-blue-dark)) !important;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-blue-dark)) !important;
   color: #fff !important;
   box-shadow: 0 18px 44px rgba(55, 104, 244, .28) !important;
 }
@@ -1220,8 +1220,8 @@ textarea { resize: vertical; }
 .mini-button.warm,
 .footer .mini-button,
 #footer-whatsapp {
-  background: var(--debeer-blue-soft) !important;
-  color: var(--debeer-blue-dark) !important;
+  background: var(--brand-blue-soft) !important;
+  color: var(--brand-blue-dark) !important;
   border-color: rgba(55, 104, 244, .22) !important;
 }
 
@@ -1234,7 +1234,7 @@ textarea { resize: vertical; }
 
 .brand img,
 .login-logo {
-  background: var(--debeer-blue) !important;
+  background: var(--brand-blue) !important;
   box-shadow: 0 14px 32px rgba(55, 104, 244, .28) !important;
 }
 
@@ -1244,18 +1244,18 @@ textarea { resize: vertical; }
 
 .menu-item.featured::before,
 .menu-item::before {
-  background: linear-gradient(180deg, var(--debeer-blue), #7DA0FF) !important;
+  background: linear-gradient(180deg, var(--brand-blue), #7DA0FF) !important;
 }
 
 .price,
 .location-time {
-  color: var(--debeer-blue-dark) !important;
+  color: var(--brand-blue-dark) !important;
 }
 
 .tag,
 .tag.orange {
-  background: var(--debeer-blue-soft) !important;
-  color: var(--debeer-blue-dark) !important;
+  background: var(--brand-blue-soft) !important;
+  color: var(--brand-blue-dark) !important;
 }
 
 .search-box:focus-within,
@@ -1278,7 +1278,7 @@ textarea { resize: vertical; }
 }
 
 .footer {
-  background: linear-gradient(135deg, var(--debeer-navy), #0A3850) !important;
+  background: linear-gradient(135deg, var(--brand-navy), #0A3850) !important;
 }
 
 .admin-sidebar,
@@ -1289,10 +1289,10 @@ textarea { resize: vertical; }
 }
 
 .nav-item.active {
-  background: var(--debeer-blue-soft) !important;
-  color: var(--debeer-blue-dark) !important;
+  background: var(--brand-blue-soft) !important;
+  color: var(--brand-blue-dark) !important;
 }
 
 .metric-card strong {
-  color: var(--debeer-blue-dark) !important;
+  color: var(--brand-blue-dark) !important;
 }
