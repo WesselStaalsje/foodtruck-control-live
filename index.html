@@ -39,13 +39,26 @@
             <div class="status-dot"></div>
             <div>
               <p class="small-label">Vandaag bij de kraam</p>
-              <h2 id="current-status">Live menu actief</h2>
+              <h2 id="current-status">Locaties van vandaag</h2>
             </div>
           </div>
 
-          <div id="today-map-list" class="today-map-list" aria-label="Actieve standplaatsen vandaag"></div>
+          <div id="today-map-list" class="today-map-list" aria-label="Actieve standplaatsen vandaag">
+            <div class="today-map-card inactive">
+              <div class="map-preview muted-map" aria-hidden="true">
+                <span class="map-road road-a"></span>
+                <span class="map-road road-b"></span>
+                <span class="map-pin">…</span>
+              </div>
+              <div class="map-copy">
+                <strong>Locaties laden...</strong>
+                <span>De actuele standplaatsen worden opgehaald.</span>
+                <small>Even geduld</small>
+              </div>
+            </div>
+          </div>
 
-          <p id="current-location" class="today-note">Assortiment en beschikbaarheid kunnen per dag wisselen.</p>
+          <p id="current-location" class="today-note">Tik op een locatie om direct Google Maps te openen.</p>
 
           <div class="status-actions">
             <a id="call-link" class="mini-button" href="tel:+31622479902">Bellen</a>

@@ -527,3 +527,145 @@ textarea { resize: vertical; }
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Hero locatiekaartjes hardfix */
+.today-card {
+  display: grid;
+  gap: 18px;
+}
+
+.today-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.today-map-list {
+  display: grid;
+  gap: 10px;
+}
+
+.today-map-card {
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 22px;
+  text-decoration: none;
+  color: inherit;
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.18);
+  transition: transform .18s ease, background .18s ease, border-color .18s ease;
+}
+
+.today-map-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,.14);
+  border-color: rgba(255,255,255,.28);
+}
+
+.today-map-card.inactive {
+  cursor: default;
+  opacity: .82;
+}
+
+.today-map-card.inactive:hover {
+  transform: none;
+}
+
+.map-preview {
+  position: relative;
+  min-height: 66px;
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(55, 182, 255, .32), rgba(255, 133, 79, .18)),
+    radial-gradient(circle at 72% 22%, rgba(255,255,255,.25), transparent 24%),
+    rgba(4, 33, 50, .55);
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+.map-road {
+  position: absolute;
+  display: block;
+  background: rgba(255,255,255,.32);
+  border-radius: 999px;
+}
+
+.road-a {
+  width: 110px;
+  height: 10px;
+  left: -16px;
+  top: 26px;
+  transform: rotate(-18deg);
+}
+
+.road-b {
+  width: 90px;
+  height: 8px;
+  right: -22px;
+  bottom: 18px;
+  transform: rotate(32deg);
+}
+
+.map-pin {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #ff7a3d;
+  color: #fff;
+  font-weight: 900;
+  box-shadow: 0 12px 24px rgba(0,0,0,.22);
+}
+
+.muted-map {
+  opacity: .75;
+}
+
+.map-copy {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.map-copy strong {
+  font-size: 1rem;
+  line-height: 1.15;
+}
+
+.map-copy span {
+  color: rgba(255,255,255,.78);
+  font-size: .88rem;
+  line-height: 1.25;
+}
+
+.map-copy small {
+  color: #ffe0cf;
+  font-weight: 900;
+  font-size: .78rem;
+}
+
+.today-note {
+  margin: 0;
+  color: rgba(255,255,255,.76);
+}
+
+@media (max-width: 560px) {
+  .today-map-card {
+    grid-template-columns: 62px 1fr;
+    border-radius: 18px;
+  }
+
+  .map-preview {
+    min-height: 58px;
+    border-radius: 15px;
+  }
+}

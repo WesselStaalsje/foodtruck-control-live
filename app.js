@@ -314,3 +314,123 @@ function renderTodayHeroLocation(state) {
 
   init();
 })();
+
+
+/* Hardfix hero locaties van vandaag */
+
+function deBeerNormalizeDay(value) {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function deBeerLocationIsActive(location) {
+  const value = location?.active;
+  return value === true || value === 1 || value === "true" || value === "1";
+}
+
+function deBeerGetDayIndex(dayLabel) {
+  const day = deBeerNormalizeDay(dayLabel);
+  const days = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
+  return days.findIndex((name) => day.includes(name));
+}
+
+function deBeerParseTimeStart(timeLabel) {
+  const text = String(timeLabel || "");
+  const match = text.match(/\d{1,2}[:.]\d{2}|\d{1,2}/);
+  if (!match) return 9999;
+  const [h, m = "0"] = match[0].replace(".", ":").split(":");
+  return (Number(h) * 60) + Number(m);
+}
+
+function deBeerMapsUrl(location) {
+  if (location?.map_url) return location.map_url;
+  const query = [location?.place, location?.address].filter(Boolean).join(" ");
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+}
+
+function deBeerEscape(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function renderTodayHeroLocation(state) {
+  const listEl = document.querySelector("#today-map-list");
+  const statusEl = document.querySelector("#current-status");
+  const noteEl = document.querySelector("#current-location");
+  if (!listEl) return;
+
+  const todayIndex = new Date().getDay();
+
+  const locations = (state?.locations || [])
+    .filter(deBeerLocationIsActive)
+    .map((location, index) => ({
+      ...location,
+      _index: index,
+      _dayIndex: deBeerGetDayIndex(location.day_label),
+      _sortTime: deBeerParseTimeStart(location.time_label),
+    }))
+    .filter((location) => location._dayIndex === todayIndex)
+    .sort((a, b) => a._sortTime - b._sortTime || a._index - b._index);
+
+  listEl.innerHTML = "";
+
+  if (!locations.length) {
+    if (statusEl) statusEl.textContent = "Vandaag geen actieve standplaats";
+    if (noteEl) noteEl.textContent = "Er zijn vandaag geen actieve locaties ingevuld of zichtbaar gezet.";
+    listEl.innerHTML = `
+      <a class="today-map-card inactive" href="#locaties">
+        <div class="map-preview muted-map" aria-hidden="true">
+          <span class="map-road road-a"></span>
+          <span class="map-road road-b"></span>
+          <span class="map-pin">×</span>
+        </div>
+        <div class="map-copy">
+          <strong>Geen kraamlocatie vandaag</strong>
+          <span>Bekijk de weekplanning hieronder of neem contact op.</span>
+          <small>Geen actieve locatie voor vandaag</small>
+        </div>
+      </a>
+    `;
+    return;
+  }
+
+  if (statusEl) {
+    statusEl.textContent = locations.length === 1
+      ? "Vandaag op locatie"
+      : `Vandaag op ${locations.length} locaties`;
+  }
+
+  if (noteEl) {
+    noteEl.textContent = "Tik op een locatie om direct Google Maps te openen.";
+  }
+
+  for (const location of locations) {
+    const link = document.createElement("a");
+    link.className = "today-map-card";
+    link.href = deBeerMapsUrl(location);
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.setAttribute("aria-label", `Open ${location.place || "locatie"} in Google Maps`);
+    link.innerHTML = `
+      <div class="map-preview" aria-hidden="true">
+        <span class="map-road road-a"></span>
+        <span class="map-road road-b"></span>
+        <span class="map-pin">⌖</span>
+      </div>
+      <div class="map-copy">
+        <strong>${deBeerEscape(location.place || "Standplaats")}</strong>
+        <span>${deBeerEscape(location.address || "Adres volgt")}</span>
+        <small>${deBeerEscape(location.day_label || "Vandaag")} · ${deBeerEscape(location.time_label || "Tijden volgen")}</small>
+      </div>
+    `;
+    listEl.appendChild(link);
+  }
+}
+

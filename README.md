@@ -223,3 +223,18 @@ Gedrag:
 - verborgen locaties worden niet getoond;
 - meerdere actieve locaties op dezelfde dag verschijnen tegelijk;
 - elk locatiekaartje opent de juiste Google Maps-link.
+
+
+## Hardfix hero locaties
+
+Deze versie vervangt de hero-card hard door een locatieblok.
+
+De hero toont:
+- alle actieve locaties van de huidige dag;
+- alle tijden per locatie;
+- meerdere locaties tegelijk;
+- geen verborgen locaties;
+- geen locaties van andere dagen;
+- klikbaar naar Google Maps.
+
+De service-worker cache is tijdelijk uitgeschakeld zodat Vercel/browser niet steeds oude bestanden blijft tonen.
