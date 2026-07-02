@@ -293,3 +293,9 @@ Deze versie is klantgericht opgeschoond:
 - footer-disclaimer toegevoegd;
 - Supabase-config intact gehouden;
 - service-worker cache uit tijdens pitch/testfase.
+
+
+## Layout fix
+
+De extra trust-strip is verwijderd omdat die visueel over de drie navigatiekaarten heen viel.
+De drie quick-cards zijn nu rustiger, gelijkmatig uitgelijnd en bevatten zelf de nuttige informatie.
