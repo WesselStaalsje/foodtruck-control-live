@@ -203,7 +203,8 @@ function renderTodayHeroLocation(state) {
     els.tabs.querySelectorAll("button").forEach(button => button.addEventListener("click", () => {
       activeCategory = button.dataset.category;
       renderTabs();
-      renderTodayHeroLocation(state);
+      window.__DEBEER_LAST_STATE = state;
+  renderTodayHeroLocationWithFallback(state);
   renderMenu();
     }));
   }
@@ -431,6 +432,99 @@ function renderTodayHeroLocation(state) {
       </div>
     `;
     listEl.appendChild(link);
+  }
+}
+
+
+
+
+/* Loadfix hero locaties: forceer render na Supabase/local data-load */
+function deBeerForceHeroRenderSoon() {
+  window.setTimeout(() => {
+    const knownState =
+      window.__DEBEER_LAST_STATE ||
+      window.state ||
+      window.appState ||
+      window.APP_STATE ||
+      null;
+
+    if (knownState && Array.isArray(knownState.locations)) {
+      renderTodayHeroLocationWithFallback(knownState);
+      return;
+    }
+
+    const listEl = document.querySelector("#today-map-list");
+    const statusEl = document.querySelector("#current-status");
+    const noteEl = document.querySelector("#current-location");
+
+    if (listEl && listEl.textContent.includes("Locaties ophalen")) {
+      if (statusEl) statusEl.textContent = "Locaties niet geladen";
+      if (noteEl) noteEl.textContent = "Controleer Supabase-data of vernieuw de pagina.";
+      listEl.innerHTML = `
+        <a class="today-map-card inactive" href="#locaties">
+          <div class="map-preview muted-map" aria-hidden="true">
+            <span class="map-road road-a"></span>
+            <span class="map-road road-b"></span>
+            <span class="map-pin">!</span>
+          </div>
+          <div class="map-copy">
+            <strong>Locaties niet geladen</strong>
+            <span>De app kreeg geen locatiegegevens terug.</span>
+            <small>Check Supabase of refresh</small>
+          </div>
+        </a>
+      `;
+    }
+  }, 1200);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  deBeerForceHeroRenderSoon();
+  window.setTimeout(deBeerForceHeroRenderSoon, 2500);
+});
+
+
+
+
+async function deBeerFetchLocationsFallback() {
+  try {
+    if (!window.APP_CONFIG || window.APP_CONFIG.DEMO_MODE || !window.supabase) return null;
+    const client = window.supabase.createClient(window.APP_CONFIG.SUPABASE_URL, window.APP_CONFIG.SUPABASE_ANON_KEY);
+    const { data: business, error: businessError } = await client
+      .from("businesses")
+      .select("id")
+      .eq("slug", window.APP_CONFIG.DEFAULT_BUSINESS_SLUG)
+      .single();
+
+    if (businessError || !business?.id) return null;
+
+    const { data: locations, error } = await client
+      .from("locations")
+      .select("*")
+      .eq("business_id", business.id)
+      .order("display_order", { ascending: true });
+
+    if (error) return null;
+    return locations || [];
+  } catch (error) {
+    console.warn("Locatie fallback mislukt", error);
+    return null;
+  }
+}
+
+async function renderTodayHeroLocationWithFallback(state) {
+  if (state && Array.isArray(state.locations) && state.locations.length) {
+    renderTodayHeroLocation(state);
+    return;
+  }
+
+  const locations = await deBeerFetchLocationsFallback();
+  if (locations) {
+    const nextState = { ...(state || {}), locations };
+    window.__DEBEER_LAST_STATE = nextState;
+    renderTodayHeroLocation(nextState);
+  } else {
+    renderTodayHeroLocation(state || { locations: [] });
   }
 }
 

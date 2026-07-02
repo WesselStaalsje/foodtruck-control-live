@@ -238,3 +238,11 @@ De hero toont:
 - klikbaar naar Google Maps.
 
 De service-worker cache is tijdelijk uitgeschakeld zodat Vercel/browser niet steeds oude bestanden blijft tonen.
+
+
+## Loadfix hero locaties
+
+Deze versie forceert de hero opnieuw te renderen nadat de app-data is geladen.
+Als `state.locations` leeg blijft, doet de hero zelf nog een fallback-query op Supabase naar de tabel `locations`.
+
+Daardoor blijft hij niet meer eindeloos hangen op “Locaties ophalen...”.
