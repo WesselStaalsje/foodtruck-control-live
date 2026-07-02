@@ -1,7 +1,9 @@
-window.FOODTRUCK_CONTROL_CONFIG = {
-  supabaseUrl: "https://YOUR_PROJECT.supabase.co",
-  supabaseAnonKey: "YOUR_SUPABASE_ANON_KEY",
-  demoMode: false,
-  defaultTruckSlug: "bites-on-wheels",
-  adminPath: "admin.html"
+// Kopieer dit bestand naar config.js en vul Supabase in voor live gebruik.
+// Laat DEMO_MODE op true staan als je alleen lokaal/demo wilt testen.
+window.APP_CONFIG = {
+  DEFAULT_BUSINESS_SLUG: "vishandel-de-beer",
+  DEMO_MODE: true,
+  SUPABASE_URL: "",
+  SUPABASE_ANON_KEY: "",
+  ADMIN_PIN: "2468"
 };

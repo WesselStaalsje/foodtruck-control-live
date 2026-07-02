@@ -1,17 +1,12 @@
 {
-  "name": "Foodtruck Control",
-  "short_name": "TruckControl",
-  "description": "Live QR-menu en cateringaanvragen voor foodtrucks en cateraars.",
+  "name": "Vishandel De Beer Live Menu",
+  "short_name": "De Beer",
+  "description": "Live QR-menu, locaties en schotelaanvragen voor Vishandel De Beer.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#15100b",
-  "theme_color": "#ff6b35",
+  "background_color": "#062033",
+  "theme_color": "#062033",
   "icons": [
-    {
-      "src": "/assets/logo.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    { "src": "/assets/logo.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]
 }

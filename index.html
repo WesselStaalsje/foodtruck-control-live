@@ -1,178 +1,160 @@
 <!doctype html>
 <html lang="nl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#ff6b35" />
-    <meta name="description" content="Live QR-menu, locatie en cateringaanvragen voor foodtrucks en cateraars." />
-    <title>Foodtruck Control | Live QR-menu</title>
-    <link rel="icon" href="/assets/logo.svg" />
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <link rel="stylesheet" href="/styles.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/config.js"></script>
-    <script src="/app.js" defer></script>
-  </head>
-  <body class="public-page">
-    <div class="site-shell">
-      <header class="public-hero" id="hero">
-        <nav class="public-nav" aria-label="Hoofdnavigatie">
-          <a href="#menu" class="nav-pill">Menu</a>
-          <a href="#location" class="nav-pill">Locatie</a>
-          <a href="#catering" class="nav-pill accent">Catering</a>
-        </nav>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#062033" />
+  <meta name="description" content="Live QR-menu en schotelaanvragen voor Vishandel De Beer." />
+  <title>Vishandel De Beer | Live menu</title>
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="public-app">
+  <div class="app-shell">
+    <header class="hero hero-public">
+      <nav class="topbar" aria-label="Snelmenu">
+        <a class="brand" href="#top" aria-label="Vishandel De Beer home">
+          <img src="/assets/logo.svg" alt="" />
+          <span>Vishandel De Beer</span>
+        </a>
+        <a class="ghost-link" href="#locaties">Waar staan we?</a>
+      </nav>
 
-        <div class="hero-grid">
-          <section class="hero-copy">
-            <div class="brand-row">
-              <img id="businessLogo" class="brand-logo" src="/assets/logo.svg" alt="Logo" />
-              <div>
-                <p class="eyebrow" id="businessTagline">Live streetfood</p>
-                <h1 id="businessName">Foodtruck Control</h1>
-              </div>
-            </div>
-            <p class="hero-description" id="businessDescription">Scan, kies en bestel sneller. Deze pagina wordt live beheerd door de foodtruck.</p>
-
-            <div class="status-card" id="statusCard">
-              <span class="status-dot"></span>
-              <div>
-                <strong id="openStatus">Vandaag open</strong>
-                <span id="statusNote">Bekijk hieronder de actuele locatie en het menu.</span>
-              </div>
-            </div>
-
-            <div class="hero-actions">
-              <a class="btn primary" href="#menu">Bekijk menu</a>
-              <a class="btn ghost" id="whatsappHero" href="#">WhatsApp</a>
-            </div>
-          </section>
-
-          <aside class="hero-card glass-card" aria-label="Vandaag">
-            <span class="floating-badge">Live vandaag</span>
-            <h2 id="locationTitle">Standplaats volgt</h2>
-            <p id="locationAddress">De actuele locatie wordt hier getoond.</p>
-            <a class="map-link" id="mapsLink" href="#" target="_blank" rel="noreferrer">Open route</a>
-            <div class="mini-metrics">
-              <span><strong id="itemCount">0</strong> items</span>
-              <span><strong id="featuredCount">0</strong> specials</span>
-            </div>
-          </aside>
+      <section id="top" class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow" id="status-eyebrow">Live dagmenu</p>
+          <h1 id="business-name">Dagverse vis, schotels en lekkers van de kraam.</h1>
+          <p class="hero-text" id="business-description">Bekijk het actuele assortiment, check waar de kraam staat en vraag eenvoudig een schotel of bestelling aan.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#menu">Bekijk menu</a>
+            <a class="button secondary" href="#aanvragen">Schotel aanvragen</a>
+          </div>
         </div>
-      </header>
-
-      <main>
-        <section class="section intro-strip" aria-label="Snelle acties">
-          <article>
-            <span>01</span>
-            <strong>Scan de QR-code</strong>
-            <p>Open direct het actuele menu zonder app-download.</p>
-          </article>
-          <article>
-            <span>02</span>
-            <strong>Kies sneller</strong>
-            <p>Categorieën, allergenen, prijzen en uitverkocht-status in één scherm.</p>
-          </article>
-          <article>
-            <span>03</span>
-            <strong>Boek catering</strong>
-            <p>Vraag de foodtruck direct aan voor je feest, markt of bedrijfsevent.</p>
-          </article>
-        </section>
-
-        <section class="section" id="menu">
-          <div class="section-heading">
-            <p class="eyebrow">Actueel menu</p>
-            <h2>Vandaag op de kaart</h2>
-            <p>Alle prijzen en beschikbaarheid worden live bijgewerkt door de foodtruck.</p>
+        <aside class="status-card" aria-live="polite">
+          <div class="status-dot"></div>
+          <p class="small-label">Vandaag</p>
+          <h2 id="current-status">Open volgens planning</h2>
+          <p id="current-location">Bekijk hieronder de actuele standplaatsen.</p>
+          <div class="status-actions">
+            <a id="call-link" class="mini-button" href="tel:+31622479902">Bellen</a>
+            <a id="whatsapp-link" class="mini-button warm" target="_blank" rel="noreferrer">WhatsApp</a>
           </div>
-          <div class="category-tabs" id="categoryTabs" role="tablist"></div>
-          <div class="menu-grid" id="menuGrid" aria-live="polite"></div>
-        </section>
+        </aside>
+      </section>
+    </header>
 
-        <section class="section two-column" id="location">
-          <div class="location-panel glass-card">
-            <p class="eyebrow">Waar staan we?</p>
-            <h2 id="locationTitleLarge">Actuele locatie</h2>
-            <p id="locationAddressLarge">De locatie wordt geladen.</p>
-            <p id="hoursBlock" class="hours-block"></p>
-            <a class="btn primary" id="mapsLinkLarge" href="#" target="_blank" rel="noreferrer">Route openen</a>
-          </div>
+    <main>
+      <section class="quick-panel" aria-label="Snel kiezen">
+        <a href="#menu" class="quick-card">
+          <span>01</span>
+          <strong>Menu</strong>
+          <small>Prijzen, dagproducten en uitverkocht-status.</small>
+        </a>
+        <a href="#locaties" class="quick-card">
+          <span>02</span>
+          <strong>Standplaatsen</strong>
+          <small>Waar staat de kraam vandaag of deze week?</small>
+        </a>
+        <a href="#aanvragen" class="quick-card">
+          <span>03</span>
+          <strong>Aanvragen</strong>
+          <small>Schotel, bestelling of vraag direct doorsturen.</small>
+        </a>
+      </section>
 
-          <div class="notice-stack">
-            <div class="notice-card">
-              <strong>Pop-up, markt of festival?</strong>
-              <p id="nextEventNote">Bekijk onze socials voor extra updates en tijdelijke menu-items.</p>
-            </div>
-            <div class="notice-card warm">
-              <strong>Allergenen</strong>
-              <p>Allergenen staan per item vermeld. Vraag op locatie altijd na bij twijfel.</p>
-            </div>
-          </div>
-        </section>
+      <section id="menu" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Actueel assortiment</p>
+          <h2>Live menu</h2>
+          <p>De ondernemer kan prijzen, beschikbaarheid en categorieën direct aanpassen in het beheerscherm.</p>
+        </div>
 
-        <section class="section catering-section" id="catering">
-          <div class="section-heading centered">
-            <p class="eyebrow">Catering</p>
-            <h2>Boek deze foodtruck voor je event</h2>
-            <p>Vul je aanvraag in. De ondernemer ontvangt alle gegevens overzichtelijk.</p>
-          </div>
+        <div class="menu-tools">
+          <label class="search-box">
+            <span>Zoeken</span>
+            <input id="menu-search" type="search" placeholder="Zoek op kibbeling, zalm, mosselen..." autocomplete="off" />
+          </label>
+          <div id="category-tabs" class="pill-row" role="tablist" aria-label="Categorieën"></div>
+        </div>
 
-          <form class="catering-form glass-card" id="cateringForm">
-            <div class="form-grid">
-              <label>Naam
-                <input name="customer_name" type="text" autocomplete="name" required placeholder="Jouw naam" />
-              </label>
-              <label>Telefoon
-                <input name="phone" type="tel" autocomplete="tel" required placeholder="06..." />
-              </label>
-              <label>E-mail
-                <input name="email" type="email" autocomplete="email" placeholder="naam@email.nl" />
-              </label>
-              <label>Datum event
-                <input name="event_date" type="date" required />
-              </label>
-              <label>Locatie event
-                <input name="location" type="text" required placeholder="Plaats / adres" />
-              </label>
-              <label>Aantal personen
-                <input name="guest_count" type="number" min="10" step="1" required placeholder="Bijv. 75" />
-              </label>
-              <label>Type event
-                <select name="event_type" required>
-                  <option value="">Kies type event</option>
-                  <option>Bedrijfsevent</option>
-                  <option>Bruiloft</option>
-                  <option>Festival / markt</option>
-                  <option>Verjaardag / privéfeest</option>
-                  <option>Lunch / borrel</option>
-                </select>
-              </label>
-              <label>Gewenst menu
-                <select name="menu_preference">
-                  <option>Laat ondernemer adviseren</option>
-                  <option>Streetfood menu</option>
-                  <option>Vega / vegan opties</option>
-                  <option>Lunchpakket</option>
-                  <option>Festival snelle service</option>
-                </select>
-              </label>
-            </div>
-            <label>Opmerking
-              <textarea name="message" rows="4" placeholder="Vertel kort wat je zoekt..."></textarea>
+        <div id="menu-list" class="menu-list" aria-live="polite"></div>
+      </section>
+
+      <section id="locaties" class="section split-section">
+        <div class="section-heading sticky-heading">
+          <p class="eyebrow">Weekplanning</p>
+          <h2>Waar staan we?</h2>
+          <p>De standplaatsen zijn apart beheerbaar, zodat de QR-pagina altijd klopt.</p>
+        </div>
+        <div id="locations-list" class="location-list"></div>
+      </section>
+
+      <section id="aanvragen" class="section request-section">
+        <div class="section-heading">
+          <p class="eyebrow">Schotel of bestelling</p>
+          <h2>Vraag direct aan</h2>
+          <p>De aanvraag komt in het dashboard en kan ook via WhatsApp worden doorgestuurd.</p>
+        </div>
+
+        <form id="request-form" class="request-card">
+          <div class="form-grid">
+            <label>
+              <span>Naam</span>
+              <input name="name" required placeholder="Uw naam" />
             </label>
-            <div class="form-actions">
-              <button class="btn primary" type="submit">Aanvraag versturen</button>
-              <a class="btn ghost" id="whatsappCatering" href="#">Liever WhatsApp</a>
-            </div>
-            <p class="form-feedback" id="formFeedback" role="status"></p>
-          </form>
-        </section>
-      </main>
+            <label>
+              <span>Telefoon</span>
+              <input name="phone" required placeholder="06..." inputmode="tel" />
+            </label>
+            <label>
+              <span>E-mail</span>
+              <input name="email" type="email" placeholder="optioneel" />
+            </label>
+            <label>
+              <span>Datum</span>
+              <input name="event_date" type="date" />
+            </label>
+            <label>
+              <span>Type aanvraag</span>
+              <select name="request_type">
+                <option>Schotel bestellen</option>
+                <option>Verse vis reserveren</option>
+                <option>Catering / feestje</option>
+                <option>Algemene vraag</option>
+              </select>
+            </label>
+            <label>
+              <span>Aantal personen</span>
+              <input name="people" type="number" min="1" placeholder="bijv. 10" />
+            </label>
+            <label class="span-2">
+              <span>Bericht</span>
+              <textarea name="notes" rows="5" placeholder="Wat wilt u bestellen of vragen?"></textarea>
+            </label>
+          </div>
+          <div class="form-actions">
+            <button class="button primary" type="submit">Aanvraag opslaan</button>
+            <button class="button secondary" type="button" id="send-whatsapp">Verstuur via WhatsApp</button>
+          </div>
+          <p id="request-feedback" class="feedback" role="status"></p>
+        </form>
+      </section>
+    </main>
 
-      <footer class="public-footer">
-        <p><strong id="footerName">Foodtruck Control</strong> · Live QR-menu</p>
-        <p class="muted">Powered by Foodtruck Control</p>
-      </footer>
-    </div>
-  </body>
+    <footer class="footer">
+      <div>
+        <strong id="footer-name">Vishandel De Beer</strong>
+        <p id="footer-contact">Beek en Donk · 06 22479902 · vishandeldebeer@live.nl</p>
+      </div>
+      <a id="footer-whatsapp" class="mini-button warm" target="_blank" rel="noreferrer">WhatsApp</a>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/data.js"></script>
+  <script src="/app.js"></script>
+</body>
 </html>

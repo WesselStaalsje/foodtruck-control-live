@@ -1,76 +1,225 @@
 <!doctype html>
 <html lang="nl">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#15100b" />
-    <meta name="robots" content="noindex,nofollow" />
-    <title>Foodtruck Control | Beheer</title>
-    <link rel="icon" href="/assets/logo.svg" />
-    <link rel="stylesheet" href="/styles.css" />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/config.js"></script>
-    <script src="/admin.js" defer></script>
-  </head>
-  <body class="admin-page">
-    <div class="admin-shell">
-      <aside class="admin-sidebar">
-        <div class="admin-brand">
-          <img src="/assets/logo.svg" alt="Foodtruck Control" />
-          <div>
-            <strong>Foodtruck Control</strong>
-            <span>Live beheer</span>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#062033" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Beheer | Vishandel De Beer</title>
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="admin-app">
+  <div id="login-view" class="login-screen">
+    <section class="login-card">
+      <img src="/assets/logo.svg" alt="" class="login-logo" />
+      <p class="eyebrow">Beheeromgeving</p>
+      <h1>Vishandel De Beer</h1>
+      <p>Pas menu, prijzen, standplaatsen en aanvragen aan zonder code of GitHub.</p>
+      <form id="login-form" class="login-form">
+        <label id="email-label" class="hidden">
+          <span>E-mail</span>
+          <input name="email" type="email" autocomplete="username" />
+        </label>
+        <label id="password-label" class="hidden">
+          <span>Wachtwoord</span>
+          <input name="password" type="password" autocomplete="current-password" />
+        </label>
+        <label id="pin-label">
+          <span>Demo pincode</span>
+          <input name="pin" inputmode="numeric" autocomplete="off" placeholder="2468" />
+        </label>
+        <button class="button primary full" type="submit">Inloggen</button>
+      </form>
+      <p id="login-feedback" class="feedback"></p>
+      <small class="muted">In live-modus gebruikt dit scherm Supabase Auth. In demo-modus gebruik je de pincode uit config.js.</small>
+    </section>
+  </div>
+
+  <div id="admin-view" class="admin-shell hidden">
+    <aside class="admin-sidebar">
+      <a class="brand admin-brand" href="/" target="_blank">
+        <img src="/assets/logo.svg" alt="" />
+        <span>De Beer Control</span>
+      </a>
+      <nav class="admin-nav" aria-label="Beheer menu">
+        <button class="nav-item active" data-panel="overview">Overzicht</button>
+        <button class="nav-item" data-panel="menu">Menu</button>
+        <button class="nav-item" data-panel="locations">Standplaatsen</button>
+        <button class="nav-item" data-panel="requests">Aanvragen</button>
+        <button class="nav-item" data-panel="settings">Instellingen</button>
+      </nav>
+      <button id="logout" class="button secondary full">Uitloggen</button>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div>
+          <p class="eyebrow">Live beheer</p>
+          <h1 id="admin-title">Vishandel De Beer</h1>
         </div>
-        <nav class="admin-tabs" aria-label="Beheer menu">
-          <button class="tab-button active" data-tab="overview">Overzicht</button>
-          <button class="tab-button" data-tab="menu">Menu</button>
-          <button class="tab-button" data-tab="categories">Categorieën</button>
-          <button class="tab-button" data-tab="requests">Aanvragen</button>
-          <button class="tab-button" data-tab="settings">Instellingen</button>
-        </nav>
-        <a class="preview-link" id="previewLink" href="/" target="_blank" rel="noreferrer">Publieke pagina openen</a>
-        <button class="logout-button" id="logoutButton" type="button">Uitloggen</button>
-      </aside>
+        <a class="button secondary" href="/" target="_blank">Bekijk publieke app</a>
+      </header>
 
-      <main class="admin-main">
-        <section class="login-card glass-card" id="loginCard">
-          <img src="/assets/logo.svg" alt="" />
-          <p class="eyebrow">Beveiligde beheeromgeving</p>
-          <h1>Log in om je menu live te beheren</h1>
-          <p>De klant ziet deze pagina niet. Alleen de publieke QR-menukaart is zichtbaar.</p>
-          <form id="loginForm" class="login-form">
-            <label>E-mail
-              <input type="email" name="email" autocomplete="email" placeholder="jij@foodtruck.nl" required />
-            </label>
-            <label>Wachtwoord
-              <input type="password" name="password" autocomplete="current-password" placeholder="••••••••" required />
-            </label>
-            <button class="btn primary" type="submit">Inloggen</button>
-          </form>
-          <button class="btn ghost demo-login" id="demoLoginButton" type="button">Demo-dashboard openen</button>
-          <p class="form-feedback" id="loginFeedback"></p>
-        </section>
+      <section id="panel-overview" class="admin-panel active">
+        <div class="admin-grid three">
+          <article class="metric-card">
+            <span>Menu-items</span>
+            <strong id="metric-items">0</strong>
+            <small>Actief en verborgen samen.</small>
+          </article>
+          <article class="metric-card">
+            <span>Uitverkocht</span>
+            <strong id="metric-soldout">0</strong>
+            <small>Vandaag niet beschikbaar.</small>
+          </article>
+          <article class="metric-card">
+            <span>Aanvragen</span>
+            <strong id="metric-requests">0</strong>
+            <small>Nog te verwerken.</small>
+          </article>
+        </div>
 
-        <section class="admin-content hidden" id="adminContent">
-          <header class="admin-topbar">
+        <form id="status-form" class="admin-card compact-form">
+          <div class="card-title-row">
             <div>
-              <p class="eyebrow">Dashboard</p>
-              <h1 id="adminBusinessName">Foodtruck</h1>
+              <p class="eyebrow">Vandaag</p>
+              <h2>Status & melding</h2>
             </div>
-            <div class="topbar-actions">
-              <span class="live-badge">Live</span>
-              <button class="btn ghost compact" id="refreshButton" type="button">Vernieuwen</button>
-            </div>
-          </header>
+            <button class="button primary" type="submit">Opslaan</button>
+          </div>
+          <div class="form-grid">
+            <label>
+              <span>Statusregel</span>
+              <input name="status_label" placeholder="Bijv. Vandaag open" />
+            </label>
+            <label class="span-2">
+              <span>Korte melding</span>
+              <input name="status_note" placeholder="Bijv. Vandaag bij de kerk in Stiphout" />
+            </label>
+          </div>
+        </form>
+      </section>
 
-          <div class="admin-tab-panel active" id="tab-overview"></div>
-          <div class="admin-tab-panel" id="tab-menu"></div>
-          <div class="admin-tab-panel" id="tab-categories"></div>
-          <div class="admin-tab-panel" id="tab-requests"></div>
-          <div class="admin-tab-panel" id="tab-settings"></div>
-        </section>
-      </main>
-    </div>
-  </body>
+      <section id="panel-menu" class="admin-panel">
+        <div class="admin-toolbar">
+          <div>
+            <p class="eyebrow">Assortiment</p>
+            <h2>Menu beheren</h2>
+          </div>
+          <button id="new-item" class="button primary">+ Product toevoegen</button>
+        </div>
+
+        <form id="item-form" class="admin-card item-editor hidden">
+          <input type="hidden" name="id" />
+          <div class="form-grid">
+            <label>
+              <span>Naam</span>
+              <input name="name" required placeholder="Kibbeling" />
+            </label>
+            <label>
+              <span>Prijs / tekst</span>
+              <input name="price_label" placeholder="€ 6,50 / dagprijs" />
+            </label>
+            <label>
+              <span>Categorie</span>
+              <select name="category_id" required></select>
+            </label>
+            <label>
+              <span>Labels</span>
+              <input name="tags" placeholder="warm, populair, glutenvrij" />
+            </label>
+            <label class="span-2">
+              <span>Omschrijving</span>
+              <textarea name="description" rows="3"></textarea>
+            </label>
+            <label class="checkline">
+              <input name="available" type="checkbox" checked /> Beschikbaar
+            </label>
+            <label class="checkline">
+              <input name="highlighted" type="checkbox" /> Uitgelicht
+            </label>
+            <label class="checkline">
+              <input name="active" type="checkbox" checked /> Tonen op menu
+            </label>
+          </div>
+          <div class="form-actions">
+            <button class="button primary" type="submit">Product opslaan</button>
+            <button id="cancel-item" class="button secondary" type="button">Annuleren</button>
+          </div>
+        </form>
+
+        <div id="admin-menu-list" class="admin-list"></div>
+      </section>
+
+      <section id="panel-locations" class="admin-panel">
+        <div class="admin-toolbar">
+          <div>
+            <p class="eyebrow">Kraamplanning</p>
+            <h2>Standplaatsen beheren</h2>
+          </div>
+          <button id="new-location" class="button primary">+ Standplaats toevoegen</button>
+        </div>
+
+        <form id="location-form" class="admin-card item-editor hidden">
+          <input type="hidden" name="id" />
+          <div class="form-grid">
+            <label><span>Dag</span><input name="day_label" required placeholder="Vrijdag" /></label>
+            <label><span>Tijd</span><input name="time_label" placeholder="10:00 - 18:00" /></label>
+            <label><span>Plaats</span><input name="place" required placeholder="Beek en Donk" /></label>
+            <label><span>Adres / plek</span><input name="address" placeholder="Heuvelplein" /></label>
+            <label class="span-2"><span>Google Maps link</span><input name="map_url" placeholder="https://maps.google.com/..." /></label>
+            <label class="checkline"><input name="active" type="checkbox" checked /> Tonen</label>
+          </div>
+          <div class="form-actions">
+            <button class="button primary" type="submit">Standplaats opslaan</button>
+            <button id="cancel-location" class="button secondary" type="button">Annuleren</button>
+          </div>
+        </form>
+
+        <div id="admin-locations-list" class="admin-list"></div>
+      </section>
+
+      <section id="panel-requests" class="admin-panel">
+        <div class="admin-toolbar">
+          <div>
+            <p class="eyebrow">Inbox</p>
+            <h2>Aanvragen</h2>
+          </div>
+          <button id="refresh-requests" class="button secondary">Ververs</button>
+        </div>
+        <div id="admin-requests-list" class="admin-list"></div>
+      </section>
+
+      <section id="panel-settings" class="admin-panel">
+        <form id="settings-form" class="admin-card">
+          <div class="card-title-row">
+            <div>
+              <p class="eyebrow">Publieke pagina</p>
+              <h2>Bedrijfsgegevens</h2>
+            </div>
+            <button class="button primary" type="submit">Opslaan</button>
+          </div>
+          <div class="form-grid">
+            <label><span>Bedrijfsnaam</span><input name="name" required /></label>
+            <label><span>Subtitel</span><input name="subtitle" /></label>
+            <label><span>Telefoon</span><input name="phone" /></label>
+            <label><span>WhatsApp</span><input name="whatsapp" /></label>
+            <label><span>E-mail</span><input name="email" /></label>
+            <label><span>Adres</span><input name="address" /></label>
+            <label class="span-2"><span>Intro tekst</span><textarea name="description" rows="4"></textarea></label>
+          </div>
+        </form>
+      </section>
+
+      <p id="admin-feedback" class="feedback floating-feedback" role="status"></p>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/data.js"></script>
+  <script src="/admin.js"></script>
+</body>
 </html>

@@ -1,286 +1,154 @@
-# Foodtruck Control Live
+# Vishandel De Beer Live App
 
-Operationele webapp voor foodtrucks en cateraars.
+Operationele QR-menu en beheerapp voor een vishandel/foodtruck/cateraar.
 
-Deze repo is bewust **no-build** gemaakt. Daardoor werkt hij op Vercel, Netlify en elke statische host zonder `npm install`, zonder Vite en zonder build-errors.
+Deze repo is bewust **no-build** gemaakt:
+
+- geen `npm install`
+- geen React/Vite-build
+- werkt direct op Vercel en Netlify
+- publieke klantkant + aparte beheeromgeving
+- demo-mode via browseropslag
+- live-mode via Supabase
+
+## Pagina's
+
+| Pagina | Doel |
+|---|---|
+| `/` | Publieke klant-app / QR-menu |
+| `/admin.html` | Beheerscherm voor menu, prijzen, standplaatsen en aanvragen |
 
 ## Wat zit erin?
 
-### Publieke QR-menukaart
+### Publieke klantkant
 
-Bestand: `index.html`
-
-De klant ziet:
-
-- live menu
-- prijzen
-- categorieën
-- allergenen/labels
-- uitverkocht-status
-- actuele locatie
-- openingstijden
+- mobiel-first QR-menu
+- categorieën en zoekfunctie
+- prijzen/dagprijs/uitverkocht-status
+- standplaatsen
 - WhatsApp-knop
-- cateringaanvraagformulier
+- aanvraagformulier voor schotel, reservering of catering
+- PWA manifest voor beginscherm op telefoon
 
-### Beheeromgeving
+### Beheerkant
 
-Bestand: `admin.html`
-
-De foodtruck/cateraar kan beheren:
-
-- menu-items toevoegen
-- prijzen wijzigen
+- login
+- statusmelding aanpassen
+- menu-item toevoegen/bewerken/verwijderen
+- prijzen aanpassen
 - item op uitverkocht zetten
-- items verbergen/tonen
-- categorieën toevoegen
-- cateringaanvragen bekijken
-- locatie/status/openingstijden wijzigen
-- kleuren en basisgegevens aanpassen
+- item verbergen/tonen
+- standplaatsen beheren
+- aanvragen bekijken
+- bedrijfsgegevens aanpassen
 
-De beheeromgeving wordt niet gelinkt op de publieke pagina. Gebruik zelf de directe beheerlink:
+## Demo-mode
 
-```txt
-https://jouwdomein.nl/admin.html
-```
+Standaard staat de app in demo-mode.
 
-De publieke QR-code linkt gewoon naar:
+Open:
 
-```txt
-https://jouwdomein.nl/?truck=bites-on-wheels
-```
-
-## Bestanden
-
-```txt
-assets/logo.svg                  app-icoon/logo
-index.html                       publieke QR-menukaart
-admin.html                       beheeromgeving
-styles.css                       volledige styling
-app.js                           publieke app-logica
-admin.js                         beheerlogica
-config.js                        live/demo configuratie
-config.example.js                voorbeeldconfiguratie
-manifest.webmanifest             PWA instellingen
-service-worker.js                basis offline/cache
-vercel.json                      Vercel no-build config
-netlify.toml                     Netlify no-build config
-supabase/schema.sql              database + RLS policies
-supabase/seed.sql                demo-data voor Supabase
-README.md                        uitleg
-```
-
-## Eerst testen zonder Supabase
-
-Open `index.html` of deploy direct naar Vercel/Netlify.
-
-Standaard staat in `config.js`:
-
-```js
-window.FOODTRUCK_CONTROL_CONFIG = {
-  supabaseUrl: "",
-  supabaseAnonKey: "",
-  demoMode: true,
-  defaultTruckSlug: "bites-on-wheels",
-  adminPath: "admin.html"
-};
-```
-
-In demo mode werkt de app met browseropslag (`localStorage`).
-
-Open het dashboard:
-
-```txt
+```text
 /admin.html
 ```
 
-Klik op:
+Pincode:
 
-```txt
-Demo-dashboard openen
+```text
+2468
 ```
 
-Wijzig menu-items en open daarna de publieke pagina opnieuw. Je ziet de wijzigingen direct zolang je dezelfde browser gebruikt.
+Alles wordt dan opgeslagen in de browser via `localStorage`. Dat is handig voor testen, maar niet voor echte klantproductie.
 
-## Live operationeel maken met Supabase
+## Live maken met Supabase
 
-### 1. Maak een Supabase project aan
-
-Ga naar Supabase en maak een nieuw project.
-
-### 2. Run het schema
-
-Open Supabase → SQL Editor → plak de inhoud van:
-
-```txt
-supabase/schema.sql
-```
-
-Run het script.
-
-### 3. Voeg demo-data toe
-
-Open daarna:
-
-```txt
-supabase/seed.sql
-```
-
-Run het grootste deel van het seed-script. Laat de laatste `business_users`-regel nog uitcommentarieerd totdat je een gebruiker hebt.
-
-### 4. Maak een beheerder aan
-
-Ga naar Supabase → Authentication → Users → Add user.
-
-Maak bijvoorbeeld aan:
-
-```txt
-beheer@foodtruck.nl
-```
-
-Kopieer daarna het `user_id` van die gebruiker.
-
-### 5. Koppel de beheerder aan de foodtruck
-
-Run in SQL Editor:
+1. Maak een Supabase-project aan.
+2. Open Supabase SQL Editor.
+3. Run `supabase/schema.sql`.
+4. Run `supabase/seed.sql`.
+5. Maak in Supabase Auth een gebruiker aan voor de beheerder.
+6. Zoek in Supabase de `auth.users.id` van die gebruiker.
+7. Zoek de `businesses.id` van `vishandel-de-beer`.
+8. Voeg de beheerder toe:
 
 ```sql
-insert into public.business_users (business_id, user_id, role)
-select id, 'PLAK_HIER_AUTH_USER_ID'::uuid, 'owner'
-from public.businesses
-where slug = 'bites-on-wheels';
+insert into public.admin_profiles (user_id, business_id, role)
+values ('AUTH_USER_UUID_HIER', 'BUSINESS_UUID_HIER', 'owner');
 ```
 
-### 6. Vul Supabase gegevens in
-
-Ga naar Supabase → Project Settings → API.
-
-Kopieer:
-
-- Project URL
-- anon public key
-
-Pas `config.js` aan:
+9. Vul `config.js`:
 
 ```js
-window.FOODTRUCK_CONTROL_CONFIG = {
-  supabaseUrl: "https://YOUR_PROJECT.supabase.co",
-  supabaseAnonKey: "YOUR_SUPABASE_ANON_KEY",
-  demoMode: false,
-  defaultTruckSlug: "bites-on-wheels",
-  adminPath: "admin.html"
+window.APP_CONFIG = {
+  DEFAULT_BUSINESS_SLUG: "vishandel-de-beer",
+  DEMO_MODE: false,
+  SUPABASE_URL: "https://jouw-project.supabase.co",
+  SUPABASE_ANON_KEY: "jouw-anon-key",
+  ADMIN_PIN: "2468"
 };
 ```
 
-Commit/push opnieuw.
+Daarna gebruikt de app de live database.
 
-## Deployen op Vercel
+## Deploy op Vercel
 
-Deze repo heeft geen build nodig.
+Instellingen:
 
-Gebruik in Vercel:
-
-```txt
+```text
 Framework Preset: Other
 Install Command: echo "Skipping install"
 Build Command: echo "No build needed"
 Output Directory: .
 ```
 
-De `vercel.json` forceert dit ook al.
+`vercel.json` staat al goed ingesteld.
 
-## Deployen op Netlify
+## Deploy op Netlify
 
-Gebruik:
+Instellingen:
 
-```txt
+```text
 Build command: echo 'No build needed'
 Publish directory: .
 ```
 
-De `netlify.toml` staat al klaar.
+`netlify.toml` staat al goed ingesteld.
 
-## Productstructuur voor klanten
+## Bestanden
 
-Aanbevolen setup:
-
-```txt
-Publieke pagina:
-https://jouwdomein.nl/?truck=klant-slug
-
-Beheer:
-https://jouwdomein.nl/admin.html
+```text
+assets/logo.svg
+index.html
+admin.html
+styles.css
+app.js
+admin.js
+data.js
+config.js
+config.example.js
+manifest.webmanifest
+service-worker.js
+vercel.json
+netlify.toml
+supabase/schema.sql
+supabase/seed.sql
+README.md
 ```
 
-Bij meerdere foodtrucks maak je per klant een rij in `businesses` met eigen `slug`. De QR-code bevat dan die slug.
+## Repo-naam
 
-Voorbeeld:
+Aanbevolen:
 
-```txt
-https://jouwdomein.nl/?truck=burger-bus-brabant
-https://jouwdomein.nl/?truck=taco-truck-eindhoven
+```text
+vishandel-de-beer-live
 ```
 
-## Belangrijk over veiligheid
+Of neutraler:
 
-De publieke Supabase anon key mag in frontend-code staan. De beveiliging komt uit Row Level Security in `supabase/schema.sql`.
-
-De klant kan:
-
-- geen beheerknop zien op de publieke pagina
-- geen menu aanpassen zonder login
-- geen aanvragen bekijken zonder gekoppelde gebruiker
-
-De beheerlink is niet geheim als enige beveiliging. De echte beveiliging is Supabase Auth + RLS.
-
-## Aanpassen per klant
-
-In de beheeromgeving kun je aanpassen:
-
-- naam
-- slug
-- tagline
-- beschrijving
-- WhatsApp nummer
-- e-mail
-- locatie
-- openingstijden
-- kleuren
-- logo URL
-- menu-items
-- categorieën
-
-Voor logo's kun je eerst externe afbeeldingslinks gebruiken. Later kun je Supabase Storage toevoegen.
-
-## Volgende verbeteringen
-
-Logische uitbreidingen:
-
-- foto uploaden via Supabase Storage
-- meerdere foodtrucks per gebruiker
-- QR-code generator
-- bestellingen/pre-orders
-- export van cateringaanvragen
-- e-mailnotificatie bij aanvraag
-- Stripe/ Mollie voor abonnementen
-- eigen domein per klant
-
-## Verkooppositionering
-
-Niet verkopen als “website”.
-
-Verkoop als:
-
-> Live QR-menu + catering-aanvraagtool voor foodtrucks en cateraars. De ondernemer beheert zelf menu, prijzen, uitverkochte items en locatie zonder technische kennis.
-
-Startaanbod:
-
-```txt
-Setup: €299
-Beheer/hosting: €19 p/m
+```text
+foodtruck-control-vishandel
 ```
 
-Of eenvoudiger:
+## Let op
 
-```txt
-Eenmalig: €499
-```
+Dit is een voorstel/demo op basis van publiek zichtbare bedrijfsinformatie. Gebruik naam, merk, content en contactgegevens alleen commercieel of openbaar namens dit bedrijf als je daarvoor toestemming hebt.
