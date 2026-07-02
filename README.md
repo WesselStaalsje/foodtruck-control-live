@@ -156,9 +156,10 @@ Dit is een voorstel/demo op basis van publiek zichtbare bedrijfsinformatie. Gebr
 
 ## Logo / favicon
 
-Het logo en favicon staan als vectorbestand in Git:
+Deze versie gebruikt exact het door de gebruiker aangeleverde icoonbestand als zichtbaar logo en als browser/favicon-bestand. Bestanden:
 
-- `assets/logo.svg`
-- `assets/favicon.svg`
-
-Er wordt dus geen losse foto/png gebruikt als basislogo. `index.html`, `admin.html` en `manifest.webmanifest` verwijzen naar deze SVG-bestanden.
+- `assets/logo.png`
+- `assets/favicon.png`
+- `assets/favicon.ico`
+- `assets/icon-192.png`
+- `assets/icon-512.png`
