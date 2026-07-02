@@ -504,133 +504,26 @@ textarea { resize: vertical; }
 }
 
 
-/* Vandaag-kaart in hero */
-.today-card {
+.today-map-list {
   display: grid;
-  gap: 18px;
-  align-self: stretch;
-}
-.today-card-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-}
-.today-card-header .status-dot {
-  flex: 0 0 auto;
-  margin: 6px 0 0;
-}
-.today-map-card {
-  display: grid;
-  grid-template-columns: 116px minmax(0, 1fr);
-  gap: 16px;
-  align-items: stretch;
-  padding: 12px;
-  border-radius: 24px;
-  border: 1px solid rgba(255,255,255,.18);
-  background: rgba(255,255,255,.12);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 16px 36px rgba(0,0,0,.12);
-  transition: transform .18s ease, background .18s ease, border-color .18s ease;
-}
-.today-map-card:hover {
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.16);
-  border-color: rgba(255,255,255,.28);
-}
-.map-preview {
-  position: relative;
-  overflow: hidden;
-  min-height: 112px;
-  border-radius: 18px;
-  background:
-    radial-gradient(circle at 62% 35%, rgba(255,255,255,.95) 0 7px, transparent 8px),
-    linear-gradient(135deg, rgba(255,248,234,.96), rgba(227,244,239,.9));
-}
-.map-preview::after {
-  content: "MAPS";
-  position: absolute;
-  left: 10px;
-  bottom: 8px;
-  color: rgba(6,32,51,.34);
-  font-size: .68rem;
-  font-weight: 950;
-  letter-spacing: .14em;
-}
-.map-water {
-  position: absolute;
-  inset: auto -20px -28px -18px;
-  height: 62px;
-  transform: rotate(-8deg);
-  background: rgba(15,107,114,.18);
-  border-radius: 999px;
-}
-.map-road {
-  position: absolute;
-  height: 14px;
-  width: 150px;
-  border-radius: 999px;
-  background: rgba(239,123,69,.42);
-}
-.road-a { left: -18px; top: 32px; transform: rotate(24deg); }
-.road-b { right: -38px; bottom: 36px; transform: rotate(-36deg); background: rgba(6,32,51,.18); }
-.map-pin {
-  position: absolute;
-  left: 50%;
-  top: 48%;
-  transform: translate(-50%, -50%);
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 999px;
-  background: var(--orange);
-  color: #fff;
-  font-size: 1.28rem;
-  font-weight: 950;
-  box-shadow: 0 14px 28px rgba(239,123,69,.35);
-}
-.map-copy {
-  min-width: 0;
-  display: grid;
-  align-content: center;
-  gap: 7px;
-}
-.map-copy strong {
-  font-size: 1.25rem;
-  letter-spacing: -.04em;
-  color: #fff;
-}
-.map-copy span {
-  color: rgba(255,255,255,.78);
-  line-height: 1.35;
-}
-.map-copy small,
-.maps-hint {
-  color: #ffd9c8;
-  font-weight: 900;
-}
-.today-note { margin: 0; }
-.location-card {
-  color: inherit;
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-}
-.location-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(15,107,114,.24);
-  box-shadow: 0 16px 34px rgba(6,32,51,.09);
-}
-.maps-hint {
-  margin-top: 7px !important;
-  color: var(--teal) !important;
-  font-size: .86rem;
+  gap: 10px;
 }
 
-@media (max-width: 640px) {
-  .today-map-card {
-    grid-template-columns: 92px minmax(0, 1fr);
-    border-radius: 20px;
-    padding: 10px;
+.today-map-card.inactive {
+  cursor: default;
+  opacity: .88;
+}
+
+.today-map-card.inactive:hover {
+  transform: none;
+}
+
+.muted-map {
+  opacity: .7;
+}
+
+@media (min-width: 720px) {
+  .today-map-list {
+    grid-template-columns: 1fr;
   }
-  .map-preview { min-height: 96px; border-radius: 16px; }
-  .map-copy strong { font-size: 1.08rem; }
-  .map-copy span { font-size: .92rem; }
 }

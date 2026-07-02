@@ -165,6 +165,49 @@ Deze versie gebruikt exact het door de gebruiker aangeleverde icoonbestand als z
 - `assets/icon-512.png`
 
 
-## Update: vandaag-kaart
+## Slimme standplaats bovenin
 
-De hero/statuskaart toont nu automatisch de standplaats van vandaag op basis van `day_label` in `data.js`. Het kaartje opent Google Maps. Als `map_url` leeg is, maakt de app automatisch een Google Maps zoeklink op basis van plaats + adres.
+De hero-kaart gebruikt nu slimme standplaatslogica:
+
+- huidige dag + huidige tijd binnen een tijdvak = toon die locatie
+- anders eerstvolgende locatie later vandaag
+- anders eerstvolgende actieve locatie in de week
+- meerdere locaties op dezelfde dag worden op tijd gesorteerd
+- klik op het kaartje opent Google Maps
+
+
+## Fix: standplaats van vandaag
+
+De hero-kaart toont nu alleen nog een actieve standplaats van de huidige dag.
+
+Gedrag:
+- verborgen locaties (`active = false`) worden genegeerd;
+- locaties van andere dagen worden bovenin niet meer als fallback getoond;
+- als er vandaag geen actieve standplaats is, staat er netjes dat er vandaag geen actieve locatie is;
+- klik op het kaartje opent Google Maps wanneer er wel een actieve locatie is.
+
+Na deploy: doe op je telefoon/laptop een harde refresh of wis sitegegevens als de oude Stiphout-kaart door cache blijft staan.
+
+
+## Fix: meerdere actieve standplaatsen vandaag
+
+De hero toont nu alle actieve standplaatsen van de huidige dag, niet meer één willekeurige locatie.
+
+Gedrag:
+- locaties met `active = false` worden genegeerd;
+- alleen locaties van vandaag worden bovenin getoond;
+- meerdere locaties tegelijk of later vandaag verschijnen als losse klikbare kaartjes;
+- elk kaartje opent zijn eigen Google Maps-link;
+- locaties van andere dagen, zoals Stiphout op zaterdag, verschijnen niet op vrijdag.
+
+
+## Fix: hero gebruikt huidige tijdvak
+
+De hero toont nu alleen actieve standplaatsen die NU binnen het ingevulde tijdsbestek vallen.
+
+Voorbeeld:
+- Vrijdag 08:00–12:00 = zichtbaar tussen 08:00 en 12:00.
+- Vrijdag 13:00–17:00 = zichtbaar tussen 13:00 en 17:00.
+- Zaterdag Stiphout = niet zichtbaar op vrijdag.
+- Verborgen locaties = nooit zichtbaar.
+- Meerdere locaties met overlappend tijdvak = tegelijk zichtbaar in de hero.
