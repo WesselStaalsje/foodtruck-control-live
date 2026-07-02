@@ -5,6 +5,10 @@
     desc: document.getElementById("business-description"),
     status: document.getElementById("current-status"),
     statusNote: document.getElementById("current-location"),
+    todayPlace: document.getElementById("today-place"),
+    todayAddress: document.getElementById("today-address"),
+    todayTime: document.getElementById("today-time"),
+    todayMapCard: document.getElementById("today-map-card"),
     call: document.getElementById("call-link"),
     whatsapp: document.getElementById("whatsapp-link"),
     footerName: document.getElementById("footer-name"),
@@ -26,13 +30,52 @@
     return String(value ?? "").replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#039;", '"': "&quot;" }[char]));
   }
 
+
+  function mapUrlForLocation(location) {
+    if (location?.map_url) return location.map_url;
+    const query = [location?.place, location?.address, "Nederland"].filter(Boolean).join(" ");
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+  }
+
+  function getTodayLocation() {
+    const locations = [...(state.locations || [])]
+      .filter(location => location.active !== false)
+      .sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+    if (!locations.length) return null;
+
+    const today = new Date().toLocaleDateString("nl-NL", { weekday: "long" }).toLowerCase();
+    return locations.find(location => String(location.day_label || "").toLowerCase().includes(today)) || locations[0];
+  }
+
+  function renderTodayLocationCard() {
+    if (!els.todayMapCard || !els.todayPlace || !els.todayAddress || !els.todayTime) return;
+    const location = getTodayLocation();
+
+    if (!location) {
+      els.todayPlace.textContent = "Standplaats volgt";
+      els.todayAddress.textContent = "Bel of app voor de actuele locatie.";
+      els.todayTime.textContent = "Nog niet ingevuld";
+      els.todayMapCard.href = "#locaties";
+      els.todayMapCard.removeAttribute("target");
+      return;
+    }
+
+    els.todayPlace.textContent = location.place || "Standplaats";
+    els.todayAddress.textContent = location.address || "Adres volgt";
+    els.todayTime.textContent = `${location.day_label || "Vandaag"} · ${location.time_label || "Tijden volgen"}`;
+    els.todayMapCard.href = mapUrlForLocation(location);
+    els.todayMapCard.target = "_blank";
+    els.todayMapCard.rel = "noreferrer";
+  }
+
   function renderBusiness() {
     const b = state.business;
     document.title = `${b.name} | Live menu`;
     els.name.textContent = b.name;
     els.desc.textContent = b.description;
     els.status.textContent = b.status_label || "Live menu actief";
-    els.statusNote.textContent = b.status_note || "Bekijk het actuele aanbod en de standplaatsen.";
+    els.statusNote.textContent = b.status_note || "Assortiment en beschikbaarheid kunnen per dag wisselen.";
+    renderTodayLocationCard();
     els.call.href = `tel:${b.phone}`;
     const baseMessage = `Hallo ${b.name}, ik heb een vraag over het assortiment.`;
     const whatsappUrl = store.waUrl(b.whatsapp || b.phone, baseMessage);
@@ -99,17 +142,20 @@
       els.locations.innerHTML = `<div class="empty-state">Er zijn nog geen standplaatsen ingevuld.</div>`;
       return;
     }
-    els.locations.innerHTML = locations.map(loc => `
-      <article class="location-card">
-        <div class="location-day">${escapeHtml(loc.day_label)}</div>
-        <div>
-          <h3>${escapeHtml(loc.place)}</h3>
-          <p>${escapeHtml(loc.address || "")}</p>
-          ${loc.map_url ? `<p><a href="${escapeHtml(loc.map_url)}" target="_blank" rel="noreferrer">Open in Google Maps</a></p>` : ""}
-        </div>
-        <div class="location-time">${escapeHtml(loc.time_label || "")}</div>
-      </article>
-    `).join("");
+    els.locations.innerHTML = locations.map(loc => {
+      const mapUrl = mapUrlForLocation(loc);
+      return `
+        <a class="location-card" href="${escapeHtml(mapUrl)}" target="_blank" rel="noreferrer" aria-label="Open ${escapeHtml(loc.place)} in Google Maps">
+          <div class="location-day">${escapeHtml(loc.day_label)}</div>
+          <div>
+            <h3>${escapeHtml(loc.place)}</h3>
+            <p>${escapeHtml(loc.address || "")}</p>
+            <p class="maps-hint">Open in Google Maps</p>
+          </div>
+          <div class="location-time">${escapeHtml(loc.time_label || "")}</div>
+        </a>
+      `;
+    }).join("");
   }
 
   function requestPayload() {

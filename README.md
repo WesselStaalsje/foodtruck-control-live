@@ -163,3 +163,8 @@ Deze versie gebruikt exact het door de gebruiker aangeleverde icoonbestand als z
 - `assets/favicon.ico`
 - `assets/icon-192.png`
 - `assets/icon-512.png`
+
+
+## Update: vandaag-kaart
+
+De hero/statuskaart toont nu automatisch de standplaats van vandaag op basis van `day_label` in `data.js`. Het kaartje opent Google Maps. Als `map_url` leeg is, maakt de app automatisch een Google Maps zoeklink op basis van plaats + adres.

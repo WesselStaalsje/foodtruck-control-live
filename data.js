@@ -14,7 +14,7 @@
       address: "Rogier Monicxlaan 16, 5741ES Beek en Donk",
       description: "Bekijk het actuele assortiment, de standplaatsen en vraag snel een schotel of reservering aan.",
       status_label: "Live menu actief",
-      status_note: "Assortiment en beschikbaarheid kunnen per dag wisselen. Bel of app gerust voor zekerheid."
+      status_note: "Tik op het kaartje om de route direct in Google Maps te openen."
     },
     categories: [
       { id: "cat-gebakken", name: "Gebakken vis", description: "Warm uit de kraam", display_order: 1 },
@@ -41,15 +41,15 @@
       { id: "item-haring", category_id: "cat-schotels", name: "Haring schotel", description: "Minimaal 10 haringen. Heel, gehalveerd of in vieren gesneden, met uitjes.", price_label: "Dagprijs + €5 opmaak", tags: ["min. 10 haringen"], available: true, highlighted: false, active: true, display_order: 14 }
     ],
     locations: [
-      { id: "loc-wo-1", day_label: "Woensdag", time_label: "09:00 - 13:00", place: "Beek en Donk", address: "Weekmarkt", map_url: "", active: true, display_order: 1 },
-      { id: "loc-wo-2", day_label: "Woensdag", time_label: "15:00 - 18:00", place: "De Mortel", address: "Bij De Sprank", map_url: "", active: true, display_order: 2 },
-      { id: "loc-do-1", day_label: "Donderdag", time_label: "10:00 - 18:00", place: "Stiphout", address: "Bij de kerk", map_url: "", active: true, display_order: 3 },
-      { id: "loc-do-2", day_label: "Donderdag", time_label: "10:00 - 18:00", place: "Beek en Donk", address: "Piet van Thielplein", map_url: "", active: true, display_order: 4 },
-      { id: "loc-vr-1", day_label: "Vrijdag", time_label: "10:00 - 18:00", place: "Beek en Donk", address: "Heuvelplein", map_url: "", active: true, display_order: 5 },
-      { id: "loc-vr-2", day_label: "Vrijdag", time_label: "10:00 - 18:00", place: "Lieshout", address: "Jumbo", map_url: "", active: true, display_order: 6 },
-      { id: "loc-za-1", day_label: "Zaterdag", time_label: "09:00 - 14:00", place: "Aarle-Rixtel", address: "Bij de kerk", map_url: "", active: true, display_order: 7 },
-      { id: "loc-za-2", day_label: "Zaterdag", time_label: "09:00 - 16:00", place: "Stiphout", address: "Bij de kerk", map_url: "", active: true, display_order: 8 },
-      { id: "loc-za-3", day_label: "Zaterdag", time_label: "15:15 - 17:30", place: "Beek en Donk", address: "Piet van Thielplein", map_url: "", active: true, display_order: 9 }
+      { id: "loc-wo-1", day_label: "Woensdag", time_label: "09:00 - 13:00", place: "Beek en Donk", address: "Weekmarkt", map_url: "https://www.google.com/maps/search/?api=1&query=Weekmarkt+Beek+en+Donk+Nederland", active: true, display_order: 1 },
+      { id: "loc-wo-2", day_label: "Woensdag", time_label: "15:00 - 18:00", place: "De Mortel", address: "Bij De Sprank", map_url: "https://www.google.com/maps/search/?api=1&query=Bij+De+Sprank+De+Mortel+Nederland", active: true, display_order: 2 },
+      { id: "loc-do-1", day_label: "Donderdag", time_label: "10:00 - 18:00", place: "Stiphout", address: "Bij de kerk", map_url: "https://www.google.com/maps/search/?api=1&query=Bij+de+kerk+Stiphout+Nederland", active: true, display_order: 3 },
+      { id: "loc-do-2", day_label: "Donderdag", time_label: "10:00 - 18:00", place: "Beek en Donk", address: "Piet van Thielplein", map_url: "https://www.google.com/maps/search/?api=1&query=Piet+van+Thielplein+Beek+en+Donk+Nederland", active: true, display_order: 4 },
+      { id: "loc-vr-1", day_label: "Vrijdag", time_label: "10:00 - 18:00", place: "Beek en Donk", address: "Heuvelplein", map_url: "https://www.google.com/maps/search/?api=1&query=Heuvelplein+Beek+en+Donk+Nederland", active: true, display_order: 5 },
+      { id: "loc-vr-2", day_label: "Vrijdag", time_label: "10:00 - 18:00", place: "Lieshout", address: "Jumbo", map_url: "https://www.google.com/maps/search/?api=1&query=Jumbo+Lieshout+Nederland", active: true, display_order: 6 },
+      { id: "loc-za-1", day_label: "Zaterdag", time_label: "09:00 - 14:00", place: "Aarle-Rixtel", address: "Bij de kerk", map_url: "https://www.google.com/maps/search/?api=1&query=Bij+de+kerk+Aarle-Rixtel+Nederland", active: true, display_order: 7 },
+      { id: "loc-za-2", day_label: "Zaterdag", time_label: "09:00 - 16:00", place: "Stiphout", address: "Bij de kerk", map_url: "https://www.google.com/maps/search/?api=1&query=Bij+de+kerk+Stiphout+Nederland", active: true, display_order: 8 },
+      { id: "loc-za-3", day_label: "Zaterdag", time_label: "15:15 - 17:30", place: "Beek en Donk", address: "Piet van Thielplein", map_url: "https://www.google.com/maps/search/?api=1&query=Piet+van+Thielplein+Beek+en+Donk+Nederland", active: true, display_order: 9 }
     ],
     requests: []
   };
