@@ -312,3 +312,15 @@ Aangepast:
 - footer/disclaimer beter leesbaar gemaakt;
 - aanvraagtekst menselijker gemaakt;
 - Supabase-config intact gehouden.
+
+
+## Soldout sort fix
+
+Menu-items worden nu klantgericht gesorteerd:
+
+1. beschikbare producten eerst;
+2. uitverkochte producten altijd onderaan;
+3. daarna `display_order`;
+4. daarna alfabetisch.
+
+De check werkt nu ook als Supabase `available` teruggeeft als `false`, `0`, `"false"` of `"0"`.

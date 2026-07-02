@@ -1,3 +1,4 @@
+/* soldout-sort-fix-v1 */
 /* final-polish-v2 */
 /* polished-final-v1 */
 /* day-override-final-v1 */
@@ -36,6 +37,24 @@
       '"': "&quot;"
     }[char]));
   }
+
+
+  function itemIsSoldOut(item) {
+    const value = item?.available;
+    return value === false || value === 0 || value === "false" || value === "0";
+  }
+
+  function sortMenuItemsForCustomer(a, b) {
+    const aSoldOut = itemIsSoldOut(a) ? 1 : 0;
+    const bSoldOut = itemIsSoldOut(b) ? 1 : 0;
+
+    return (
+      aSoldOut - bSoldOut ||
+      (a.display_order || 0) - (b.display_order || 0) ||
+      String(a.name || "").localeCompare(String(b.name || ""), "nl-NL")
+    );
+  }
+
 
   function normalizeDayName(value) {
     return String(value || "")
@@ -203,11 +222,7 @@
   }
 
   function renderTabs() {
-    const categories = [...state.categories].sort((a, b) => {
-        const aSoldOut = a.available === false ? 1 : 0;
-        const bSoldOut = b.available === false ? 1 : 0;
-        return aSoldOut - bSoldOut || (a.display_order || 0) - (b.display_order || 0);
-      });
+    const categories = [...state.categories].sort(sortMenuItemsForCustomer);
     const buttons = [{ id: "all", name: "Alles" }, ...categories];
 
     els.tabs.innerHTML = buttons.map(cat => `
@@ -233,7 +248,7 @@
         .join(" ")
         .toLowerCase()
         .includes(query))
-      .sort((a, b) => (a.display_order || 0) - (b.display_order || 0));
+      .sort(sortMenuItemsForCustomer);
 
     if (!items.length) {
       els.list.innerHTML = `<div class="empty-state">Geen producten gevonden. Probeer een andere zoekterm of kies een andere categorie.</div>`;
@@ -246,13 +261,13 @@
         : String(item.tags || "").split(",").map(tag => tag.trim()).filter(Boolean);
 
       return `
-        <article class="menu-item ${item.highlighted ? "featured" : ""} ${item.available === false ? "soldout" : ""}">
+        <article class="menu-item ${item.highlighted ? "featured" : ""} ${itemIsSoldOut(item) ? "soldout" : ""}">
           <div class="menu-head">
             <div>
               <h3>${escapeHtml(item.name)}</h3>
               <small class="muted">${escapeHtml(categoryName(item.category_id))}</small>
             </div>
-            <strong class="price">${escapeHtml(item.available === false ? "Uitverkocht" : item.price_label || "Dagprijs")}</strong>
+            <strong class="price">${escapeHtml(itemIsSoldOut(item) ? "Uitverkocht" : item.price_label || "Dagprijs")}</strong>
           </div>
           <p>${escapeHtml(item.description || "")}</p>
           <div class="tag-row">
