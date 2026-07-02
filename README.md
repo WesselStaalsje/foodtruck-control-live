@@ -324,3 +324,26 @@ Menu-items worden nu klantgericht gesorteerd:
 4. daarna alfabetisch.
 
 De check werkt nu ook als Supabase `available` teruggeeft als `false`, `0`, `"false"` of `"0"`.
+
+
+## Merged final fix
+
+Deze versie combineert:
+- nette fallback-teksten in `index.html`;
+- Supabase live-config;
+- uitverkochte producten onderaan;
+- klantgerichte aanvraagteksten;
+- footer/quick-card layout fix;
+- service-worker cache uit.
+
+Controle na deploy:
+- `/index.html` mag geen tekst meer bevatten over ondernemer/beheer/dashboard.
+- `/app.js` moet bovenaan `merged-final-fix-v1` tonen.
+
+
+## No-flash fallback fix
+
+De statische fallback in `index.html` is aangepast:
+- H1 toont direct `Vishandel De Beer`;
+- de lange marketingzin staat niet meer als enorme titel tijdens laden;
+- Supabase mag daarna dezelfde tekst opnieuw invullen, zonder storende flits.
