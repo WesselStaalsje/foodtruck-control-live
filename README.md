@@ -1,5 +1,9 @@
 # Vishandel De Beer Live App
 
+
+Status: werkende demo/live prototype
+Laatste werkende versie: hero locaties + Supabase + admin werkt
+
 Operationele QR-menu en beheerapp voor een vishandel/foodtruck/cateraar.
 
 Deze repo is bewust **no-build** gemaakt:
