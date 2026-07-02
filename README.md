@@ -152,3 +152,13 @@ foodtruck-control-vishandel
 ## Let op
 
 Dit is een voorstel/demo op basis van publiek zichtbare bedrijfsinformatie. Gebruik naam, merk, content en contactgegevens alleen commercieel of openbaar namens dit bedrijf als je daarvoor toestemming hebt.
+
+
+## Logo / favicon
+
+Het logo en favicon staan als vectorbestand in Git:
+
+- `assets/logo.svg`
+- `assets/favicon.svg`
+
+Er wordt dus geen losse foto/png gebruikt als basislogo. `index.html`, `admin.html` en `manifest.webmanifest` verwijzen naar deze SVG-bestanden.
