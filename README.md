@@ -265,3 +265,18 @@ Gedrag:
 - locaties van andere dagen worden genegeerd;
 - elk kaartje opent Google Maps;
 - geen fallback/duplicate hero-code meer.
+
+
+## Fix: Nederlandse dag/tijdzone
+
+De hero bepaalt de huidige dag nu expliciet via `Europe/Amsterdam` en vergelijkt op Nederlandse dagnaam.
+
+Dus:
+- zaterdag toont zaterdaglocaties;
+- vrijdaglocaties verdwijnen op zaterdag;
+- verborgen locaties blijven verborgen;
+- meerdere zaterdaglocaties worden tegelijk getoond.
+
+Testen kan tijdelijk met:
+- `?dag=vrijdag`
+- `?dag=zaterdag`
